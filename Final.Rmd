@@ -1,0 +1,1752 @@
+---
+title: "Final Project"
+author: \textcolor{red}{Aman Singh}
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  pdf_document:
+    latex_engine: xelatex
+fontsize: 12pt
+geometry: margin = 1in
+header-includes:
+  - \usepackage{setspace}\doublespacing
+---
+$$\textbf{\underline{Introduction:}}$$
+\begin{figure}[h]
+  \centering\includegraphics[angle = 0,scale = .4]{george}
+  \centering\includegraphics[angle = 0,scale = .4]{lebron}
+  \caption{George Mikan pictured on the left and Lebron James pictured on the right}
+\end{figure}
+Sports is a huge part of America, starting from the 1800’s when Baseball was invented in 1834, and then later other sports such as American Football and then Basketball \textcolor{blue}{\cite{baseball}}. Basketball in particular however, really became big in the 1950’s when legends such as George Mikan and Bob Shayes put the NBA on notice. Fast forward to the present, and the NBA players right now such as Lebron James and Stephen Curry have been making the league exciting and fun to watch generating massive amounts of revenue and viewership for the NBA \textcolor{blue}{\cite{viewership}}.
+The biggest difference that I see in the picture above is not only the color and the race, but also the fact that it seems that Lebron James has significantly more muscle mass than George Mikans. George Mikans just looks like a skinny tall NBA player that would really suffer in the NBA today. I was curious to see why Geroge Mikans decided to play back in the NBA in the 1950’s because the players back then did not get paid the millions that they are paid currently even after adjusting for inflation. George Mikan's salary in the NBA in the 1950’s was just \$12,000 and after adjusting in the present days’ inflation using the CPI index, only \$169,433.41  \textcolor{blue}{\cite{cpi}}. That is still low for being one of the best players in the NBA today with Lebron James commanding an outstanding salary of \$37,436,858 \textcolor{blue}{\cite{lebron}}. This made me start thinking whether the NBA players now play for the love of the game or if they are chasing a paycheck. I decided to compare 2 NBA players one from the past and one from the future, George Mikan and Lebron James. In 1950-1951 season, George Mikan averaged 28.4 points a game while Lebron James, in the 2017-2018 season where he played all 82 games, averaged 27.5 points per game \textcolor{blue}{\cite{mikan,lebronppg}}. This is surprising and shows that maybe there are other factors that make an NBA player great such as how many shots they have taken, how many shots actually make, and as such there are many other factors then what the points suggest. There are also a lot of historical changes as well such as you can hold the ball as long as you wanted to in the 1950’s because the NBA didn't have the 24 second shot clock violation they do have today which can limit how many points you can shoot \textcolor{blue}{\cite{shotclock}}. I realized that another factor that could seemingly affect the 2 players could be BMI. However, BMI is largely inflated and does not take into account muscle mass. How BMI is calculated in fact takes into only weight and height with the formula given below:
+$$BMI = Weight/Height^2$$
+where BMI stands for \textcolor{blue}{Body Mass Index}, weight is in \textcolor{blue}{Kilograms} and the height is in \textcolor{blue}{Meters}. I obtained the dataset that I will be observing from Kaggle which listed all the players in the NBA season of 2014-2015 \textcolor{blue}{\cite{dataset}}.
+
+\begin{table}[hbt!]
+\centering
+\begin{tabular}{ |c|c|c|c|c| } 
+ \hline
+ Name & Points Per Game & Height & Weight & BMI \\ 
+ \hline
+ \hline
+ George Mikan & 28.4 & 2.08 & 111.13 & 25.613 \\ 
+ \hline
+ Lebron James & 27.5 & 2.06 & 113.398 & 27.4 \\ 
+ \hline
+\end{tabular}
+\caption{Past NBA stars vs the Present:}
+\end{table}
+
+Looking at this table that I made, is really just shows that BMI does not really mean much in the NBA because in terms of BMI, both of these players, who were the best in there respective decades, are considered "overweight". It made me wonder if there are other attributes like I mentioned above if there are other factors involved such as experience, salary, and perhaps even college. This made me come to the colusion that I will use this dataset to analyze: 
+$$\textcolor{red}{\textbf{Is performance in the NBA related to more than the physical attributes of an athlete?}}$$
+I have noticed that in general a plethora of people have wondered how BMI can affect a players performance on the court. In 2005, there was a study done involving Shaq, one of the heaviest players during that time and it showed that despite being one of the heaviest players in the NBA, his body fat percentage was only 13% which is pretty fit for an athlete overall \textcolor{blue}{\cite{Shaq}}. However, the reason why I decided to not state BMI in my question is because I wanted to include the fact that maybe there are other factors that could be related to performance in the NBA. It has long been stated and there have been players who put in 100% everyday and would get a huge paycheck. However, once they got that paycheck, they wouldn't play as hard anymore and thus could potentially hurt a teams' chance of making the playoffs because they can't sign more NBA players \textcolor{blue}{\cite{money}}. I will be addressing salary and whether it can hurt a team's chances of making the playoffs. In fact, I believe this question is extremely important in understanding if there are many factors in how a player performs on the court, whether the motivation is money or if they are “fit” in terms of BMI, or if it concerns their experience in the NBA. There are many factors which is why I chose this question to truly find out if the performance in the NBA is related to the physical attributes or more than just physical. I believe this question is very important to people who have a passion of the NBA and not only that but also the General Managers in the NBA who might find this analysis useful to see what specific attributes they should look for when they go and get a player, whether its considering salary, experience, or even BMI.
+$$\textbf{\underline{Understanding the Dataset:}}$$
+In this section, I will make an attempt to understand the dataset and understand the representation of each column. When I downloaded this dataset, I noticed that there were \textcolor{blue}{490} rows, with \textcolor{blue}{34} columns depicting a single player's stats as well as other personal information. However, there were a lot of NA's in the dataset. I believe that the website that this data was scraped from had a lot of missing values for a lot of players and thus leading to a lot of NA’s. In order to use CV-Lasso, and Bootstrap, we are supposed to not have any NA’s in the dataset which I also address later. I also noticed that the author of this dataset wrote \textcolor{red}{collage} instead of \textcolor{blue}{college}, so I decided to change the name to help with later analysis. I believe this dataset is very useful becauase with it not only shows how points they have shot, but also how much shots they have attempted as well which can show a percentage of there efficiency.I also made a table below showing the interpretation of each abbreviated column because a lot of people that don't understand the NBA will not understand the columns that are in this dataset. I also have to understand the fact that there is a huge limitation in the dataset. It only shows relevant statistics in the 2014-2015 year and thus if I wanted to know if BMI and Salary really have a correlation, I would not be able to really analyze that. To be further specific, if I wanted to analyze a player who in the 2014-2015 season had a BMI less than 25 and earned only 1 million per year in salary and than thus compare it to when he gets a huge salary bonus in the offseason, ie 5 million, to see if that affects his game or not, I would not be able to analyze that. It could be that he gets more lazy during the off-season reaping the rewards of his hard work and thus see a shortage both in his performance on the field and his physical body as well. I would not be able to know if the salary or BMI truly affects NBA players performance on the court. However, I can try my best to use the data that I have and try to answer the question.
+
+```{R Loading Dataset,echo = FALSE}
+nba_players_stats<- read.csv("~/Desktop/Economics/Empirical Project file/players_stats.csv")
+```
+\begin{table}[ht]
+    \caption{Interpretation of the columns in the dataset:}
+    \begin{minipage}{.5\linewidth}
+      \caption{Part A:}
+      \centering
+        \begin{tabular}{|l|l|}
+            \hline
+            \textcolor{blue}{Name of columns} & \textcolor{red}{Interpretation} \\ 
+            \hline
+            \hline
+            Name & Name  \\ 
+            \hline
+            Games.Played & Total Games Played  \\ 
+            \hline
+            MIN & Minutes Played \\
+            \hline
+            PTS & Points Made \\
+            \hline
+            FGM & Field Goals Made \\
+            \hline
+            FGA & Field Goals Att. \\
+            \hline
+            FG. & Field Goal Perc. \\
+            \hline
+            X3PM & 3 Points Made \\
+            \hline
+            X3PA & 3 points Att. \\
+            \hline
+            X3P. & 3 Point Perc. \\
+            \hline
+            FTM & Free Throws Made \\
+            \hline
+            FTA & Free Throws Att. \\
+            \hline
+            FT. & Free Throw Perc.\\
+            \hline
+            OREB & Offensive Rebounds \\
+            \hline
+            DREB & Defensive Rebounds\\
+            \hline
+            REB & Rebounds Made \\
+            \hline
+            AST & Assists Made \\
+            \hline
+        \end{tabular}
+    \end{minipage}%
+    \begin{minipage}{.5\linewidth}
+      \centering
+        \caption{Part B:}
+        \begin{tabular}{|l|l|}
+            \hline
+            \textcolor{blue}{Name of columns} & \textcolor{red}{Interpretation} \\
+            \hline
+            \hline
+            STL & Total Steals \\
+            \hline 
+            BLK & Total Blocks \\
+            \hline
+            TOV & Total Turnovers\\
+            \hline
+            PF & Total Personal Fouls \\
+            \hline
+            EFF & Efficiency on the court \\
+            \hline
+            AST.TOV & Assists/Turnover Perc.\\
+            \hline
+            STL.TOV & Steals/Turnover Perc. \\
+            \hline
+            Age & Age \\
+            \hline
+            BirthPlace & Birth Place \\
+            \hline
+            Birthdate & Birth Date \\
+            \hline
+            Collage & College \\
+            \hline
+            Experience & Experience in the NBA\\
+            \hline
+            Height & Height \\
+            \hline
+            Pos & Position on Team \\
+            \hline
+            Team & Team \\
+            \hline
+            Weight & Weight \\
+            \hline
+            BMI & Body Mass Index \\
+            \hline
+        \end{tabular}
+    \end{minipage} 
+\end{table}
+```{r Changing column Name,echo=FALSE}
+colnames(nba_players_stats)[28] = "College"
+```
+
+
+$$\textbf{\underline{Cleaning the Data:}}$$
+When I first imported the dataset, I decided to replace the  NA’s with meaningful insights. I scoured the web and eventually settled on a website to extract all my insights from \textcolor{blue}{\cite{fillna}}. The first NA’s that I found were in the \textcolor{blue}{Age} column and so I used the website to find their respective age during the 2014-2015 season. The next column that I filled in the NA’s for was the \textcolor{blue}{weight} category, which I also filled in using pounds but I realized BMI uses kilograms, which is why I decided to divide by \textcolor{red}{2.205} to convert into Kilograms. The column I filled in after that was their respective \textcolor{blue}{heights} which I filled in remembering BMI, in centimeters for easier calculation. I also then calculated the \textcolor{blue}{BMI’s} for the NBA players that did not have their height & weight originally filled in. I then also filled in the \textcolor{blue}{position} that each player respectively played in the NBA as well. I believe that can lead to some very personal and interesting insights of the data regarding position and points, or position and comparing it to weight respectively even. Upon looking at the \textcolor{blue}{Experience} column, I realized that the class of the column was a factor which you cannot thus use to graph meaningful insights. Also, a problem in that column was that the rookies in the year of 2014-2015 were listed as \textcolor{red}{“R”}. I thus changed the class of the column, replaced the “R” with 0 to indicate they have no experience in the NBA, and filled in the NA values as well. I then decided to add 2 more columns, being \textcolor{blue}{Salary} and \textcolor{blue}{Playoffs.made}. I decided to make the column Salary because I wanted to see if salary could be a big factor in the NBA in terms of their BMI, or their performance on the court. The salaries that I indexed in are adjusted according to the year 2020’s inflation rate \textcolor{blue}{\cite{nba_salary}}. I also decided to make a column called playoffs.made as well to see if depending on multiple factors, if the player was able to play in the playoffs, and I personally believe that it can lead to some meaningful insights. The Playoffs.made column is simply a column indicating that if your team made the playoffs, it would say Yes, and if not, No. The teams that made it to the playoffs in the 2014-2015 season were the \textbf{Atlanta Hawks}\includegraphics[angle = 0,scale = .03]{hawks}, the \textbf{Milwaukee Bucks}\includegraphics[angle = 0,scale = .2]{bucks}, the \textbf{Golden State Warriors}\includegraphics[angle = 0,scale = .079]{warriors}, the \textbf{Cleveland Cavaliers}\includegraphics[angle = 0,scale = .059]{cavaliers}, the \textbf{Boston Celtics}\includegraphics[angle = 0,scale = .079]{celtics}, the \textbf{Los Angeles Clippers}\includegraphics[angle = 0,scale = .039]{clippers}, the \textbf{Toronto Raptors}\includegraphics[angle = 0,scale = .063]{raptors}, and the \textbf{Brooklyn Nets}\includegraphics[angle = 0,scale = .059]{nets}.The Golden State Warriors won that year, playing against the Cleveland Cavaliers in the Finals.
+\begin{figure}[h]
+  \centering\includegraphics[angle = 0,scale = .5]{champions}
+  \caption{Warriors win first championship after 40 years}
+\end{figure}
+```{r Adding missing data,echo=FALSE}
+nba_players_stats$Team = as.character(nba_players_stats$Team)
+nba_players_stats$Birth_Place = as.character(nba_players_stats$Birth_Place)
+nba_players_stats$Birthdate = as.character.Date(nba_players_stats$Birthdate)
+nba_players_stats$College = as.character(nba_players_stats$College)
+#Amar'e Stoudemire
+nba_players_stats$Height[16] = 208.28
+nba_players_stats$Weight[16] = 245/2.205
+nba_players_stats$BMI[16] = (nba_players_stats$Weight[16]/(nba_players_stats$Height[16])^2)*10000
+nba_players_stats$Age[16] = 32
+nba_players_stats$Team[16] = "NYK"
+nba_players_stats$College[16] = "University of Miami"
+nba_players_stats$Birth_Place[16] = "us"
+nba_players_stats$Birthdate[16] = "16-Nov-82"
+#Anderson Varejao
+nba_players_stats$Height[18] = 210.82
+nba_players_stats$Weight[18] = 273/2.205
+nba_players_stats$BMI[18] = (nba_players_stats$Weight[18]/(nba_players_stats$Height[18])^2)*10000
+nba_players_stats$Age[18] = 32
+nba_players_stats$Team[18] = "CLE"
+nba_players_stats$College[18] = "no college"
+nba_players_stats$Birth_Place[18] = "br"
+nba_players_stats$Birthdate[18] = "28-Sep-82"
+#Andrew Wiggins
+nba_players_stats$Height[28] = 203.2
+nba_players_stats$Weight[28] = 194/2.205
+nba_players_stats$BMI[28] = (nba_players_stats$Weight[28]/(nba_players_stats$Height[28])^2)*10000
+nba_players_stats$Age[28] = 19
+nba_players_stats$Team[28] = "MIN"
+nba_players_stats$College[28] = "University of Kansas"
+nba_players_stats$Birth_Place[28] = "ca"
+nba_players_stats$Birthdate[28] = "23-Feb-95"
+#Anthony Tolliver
+nba_players_stats$Height[32] = 203.2
+nba_players_stats$Weight[32] = 249/2.205
+nba_players_stats$BMI[32] = (nba_players_stats$Weight[32]/(nba_players_stats$Height[32])^2)*10000
+nba_players_stats$Age[32] = 29
+nba_players_stats$Team[32] = "DET"
+nba_players_stats$College[32] = "Creighton University"
+nba_players_stats$Birth_Place[32] = "us"
+nba_players_stats$Birthdate[32] = "1-Jun-85"
+#Beno Udrih
+nba_players_stats$Height[42] = 203.2
+nba_players_stats$Weight[42] = 190.5/2.205
+nba_players_stats$BMI[42] = (nba_players_stats$Weight[42]/(nba_players_stats$Height[42])^2)*10000
+nba_players_stats$Age[42] = 32
+nba_players_stats$Team[42] = "MEM"
+nba_players_stats$College[42] = "no college"
+nba_players_stats$Birth_Place[42] = "sl"
+nba_players_stats$Birthdate[42] = "5-Jul-82"
+#Brandan Wright
+nba_players_stats$Height[49] = 208.28
+nba_players_stats$Weight[49] = 235/2.205
+nba_players_stats$BMI[49] = (nba_players_stats$Weight[49]/(nba_players_stats$Height[49])^2)*10000
+nba_players_stats$Age[49] = 27
+nba_players_stats$Team[49] = "BOS"
+nba_players_stats$College[49] = "University of North Carolina at Chapel Hill"
+nba_players_stats$Birth_Place[49] = "us"
+nba_players_stats$Birthdate[49] = "5-Oct-87"
+#Charlie Villanueva
+nba_players_stats$Height[69] = 210.82
+nba_players_stats$Weight[69] = 240/2.205
+nba_players_stats$BMI[69] = (nba_players_stats$Weight[69]/(nba_players_stats$Height[69])^2)*10000
+nba_players_stats$Age[69] = 30
+nba_players_stats$Team[69] = "DAL"
+nba_players_stats$College[69] = "University of Connecticut"
+nba_players_stats$Birth_Place[69] = "us"
+nba_players_stats$Birthdate[69] = "24-Aug-84"
+#CJ Wilcox
+nba_players_stats$Height[81] = 195.58
+nba_players_stats$Weight[81] = 194/2.205
+nba_players_stats$BMI[81] = (nba_players_stats$Weight[81]/(nba_players_stats$Height[81])^2)*10000
+nba_players_stats$Age[81] = 24
+nba_players_stats$Team[81] = "LAC"
+nba_players_stats$College[81] = "University of Washington"
+nba_players_stats$Birth_Place[81] = "us"
+nba_players_stats$Birthdate[81] = "30-Dec-90"
+#Cody Zeller
+nba_players_stats$Height[84] = 195.58
+nba_players_stats$Weight[84] = 194/2.205
+nba_players_stats$BMI[84] = (nba_players_stats$Weight[84]/(nba_players_stats$Height[84])^2)*10000
+nba_players_stats$Age[84] = 24
+nba_players_stats$Team[84] = "CHA"
+nba_players_stats$College[84] = "Indiana University Bloomington"
+nba_players_stats$Birth_Place[84] = "us"
+nba_players_stats$Birthdate[84] = "5-Oct-92"
+#David Wear
+nba_players_stats$Height[105] = 208.28
+nba_players_stats$Weight[105] = 225/2.205
+nba_players_stats$BMI[105] = (nba_players_stats$Weight[105]/(nba_players_stats$Height[105])^2)*10000
+nba_players_stats$Age[105] = 24
+nba_players_stats$Team[105] = "SAC"
+nba_players_stats$College[105] = "University of California, Los Angeles"
+nba_players_stats$Birth_Place[105] = "us"
+nba_players_stats$Birthdate[105] = "21-Sep-90"
+#Deron Williams
+nba_players_stats$Height[113] = 190.5
+nba_players_stats$Weight[113] = 201/2.205
+nba_players_stats$BMI[113] = (nba_players_stats$Weight[113]/(nba_players_stats$Height[113])^2)*10000
+nba_players_stats$Age[113] = 30
+nba_players_stats$Team[113] = "BKN"
+nba_players_stats$College[113] = "University of Illinois at Urbana-Champaign"
+nba_players_stats$Birth_Place[113] = "us"
+nba_players_stats$Birthdate[113] = "26-Jun-84"
+#Derrick Williams
+nba_players_stats$Height[116] = 203.2
+nba_players_stats$Weight[116] = 240/2.205
+nba_players_stats$BMI[116] = (nba_players_stats$Weight[116]/(nba_players_stats$Height[116])^2)*10000
+nba_players_stats$Age[116] = 23
+nba_players_stats$Team[116] = "SAC"
+nba_players_stats$College[116] = "University of Arizona"
+nba_players_stats$Birth_Place[116] = "us"
+nba_players_stats$Birthdate[116] = "25-May-91"
+#Dion Waiters
+nba_players_stats$Height[120] = 193
+nba_players_stats$Weight[120] = 216/2.205
+nba_players_stats$BMI[120] = (nba_players_stats$Weight[120]/(nba_players_stats$Height[120])^2)*10000
+nba_players_stats$Age[120] = 23
+nba_players_stats$Team[120] = "CLE"
+nba_players_stats$College[120] = "Syracuse University"
+nba_players_stats$Birth_Place[120] = "us"
+nba_players_stats$Birthdate[120] = "10-Dec-91"
+#Dorell Wright
+nba_players_stats$Height[124] = 205.74
+nba_players_stats$Weight[124] = 215/2.205
+nba_players_stats$BMI[124] = (nba_players_stats$Weight[124]/(nba_players_stats$Height[124])^2)*10000
+nba_players_stats$Age[124] = 29
+nba_players_stats$Team[124] = "POR"
+nba_players_stats$College[124] = "no college"
+nba_players_stats$Birth_Place[124] = "us"
+nba_players_stats$Birthdate[124] = "2-Dec-85"
+#Dwyane Wade
+nba_players_stats$Height[132] = 193.04
+nba_players_stats$Weight[132] = 220/2.205
+nba_players_stats$BMI[132] = (nba_players_stats$Weight[132]/(nba_players_stats$Height[132])^2)*10000
+nba_players_stats$Age[132] = 33
+nba_players_stats$Team[132] = "MIA"
+nba_players_stats$College[132] = "Marquette University"
+nba_players_stats$Birth_Place[132] = "us"
+nba_players_stats$Birthdate[132] = "17-Jan-82"
+#Ekpe Udoh
+nba_players_stats$Height[136] = 208.28
+nba_players_stats$Weight[136] = 245/2.205
+nba_players_stats$BMI[136] = (nba_players_stats$Weight[136]/(nba_players_stats$Height[136])^2)*10000
+nba_players_stats$Age[136] = 27
+nba_players_stats$Team[136] = "LAC"
+nba_players_stats$College[136] = "University of Michigan"
+nba_players_stats$Birth_Place[136] = "us"
+nba_players_stats$Birthdate[136] = "20-May-87"
+#Elijah Millsap
+nba_players_stats$Height[138] = 198.12
+nba_players_stats$Weight[138] = 216/2.205
+nba_players_stats$BMI[138] = (nba_players_stats$Weight[138]/(nba_players_stats$Height[138])^2)*10000
+nba_players_stats$Age[138] = 27
+nba_players_stats$Team[138] = "MIL"
+nba_players_stats$College[138] = "University of Alabama at Birmigham"
+nba_players_stats$Birth_Place[138] = "us"
+nba_players_stats$Birthdate[138] = "12-Aug-87"
+#Elliot Williams
+nba_players_stats$Height[139] = 195.58
+nba_players_stats$Weight[139] = 190/2.205
+nba_players_stats$BMI[139] = (nba_players_stats$Weight[139]/(nba_players_stats$Height[139])^2)*10000
+nba_players_stats$Age[139] = 25
+nba_players_stats$Team[139] = "UTA"
+nba_players_stats$College[139] = "University of Memphis"
+nba_players_stats$Birth_Place[139] = "us"
+nba_players_stats$Birthdate[139] = "20-Jun-89"
+#Festus Ezeli
+nba_players_stats$Height[149] = 205.74
+nba_players_stats$Weight[149] = 265/2.205
+nba_players_stats$BMI[149] = (nba_players_stats$Weight[149]/(nba_players_stats$Height[149])^2)*10000
+nba_players_stats$Age[149] = 25
+nba_players_stats$Team[149] = "GSW"
+nba_players_stats$College[149] = "Vanderbilt University"
+nba_players_stats$Birth_Place[149] = "ng"
+nba_players_stats$Birthdate[149] = "21-Oct-89"
+#Gerald Wallace
+nba_players_stats$Height[159] = 200.66
+nba_players_stats$Weight[159] = 220/2.205
+nba_players_stats$BMI[159] = (nba_players_stats$Weight[159]/(nba_players_stats$Height[159])^2)*10000
+nba_players_stats$Age[159] = 32
+nba_players_stats$Team[159] = "BOS"
+nba_players_stats$College[159] = "Alabama Crimson Tide"
+nba_players_stats$Birth_Place[159] = "us"
+nba_players_stats$Birthdate[159] = "23-Jul-82"
+#Gigi Datome
+nba_players_stats$Height[161] = 203.2
+nba_players_stats$Weight[161] = 216/2.205
+nba_players_stats$BMI[161] = (nba_players_stats$Weight[161]/(nba_players_stats$Height[161])^2)*10000
+nba_players_stats$Age[161] = 27
+nba_players_stats$Team[161] = "DET"
+nba_players_stats$College[161] = "no college"
+nba_players_stats$Birth_Place[161] = "itl"
+nba_players_stats$Birthdate[161] = "27-Nov-87"
+#Glenn Robinson III
+nba_players_stats$Height[164] = 198.12
+nba_players_stats$Weight[164] = 223/2.205
+nba_players_stats$BMI[164] = (nba_players_stats$Weight[164]/(nba_players_stats$Height[164])^2)*10000
+nba_players_stats$Age[164] = 21
+nba_players_stats$Team[164] = "MIN"
+nba_players_stats$College[164] = "University of Michigan"
+nba_players_stats$Birth_Place[164] = "us"
+nba_players_stats$Birthdate[164] = "8-Jan-94"
+#Hassan Whiteside
+nba_players_stats$Height[174] = 213.36
+nba_players_stats$Weight[174] = 265/2.205
+nba_players_stats$BMI[174] = (nba_players_stats$Weight[174]/(nba_players_stats$Height[174])^2)*10000
+nba_players_stats$Age[174] = 25
+nba_players_stats$Team[174] = "MIA"
+nba_players_stats$College[174] = "Marshall University"
+nba_players_stats$Birth_Place[174] = "us"
+nba_players_stats$Birthdate[174] = "13-Jun-89"
+#Hedo Turkoglu
+nba_players_stats$Height[175] = 208.28
+nba_players_stats$Weight[175] = 220/2.205
+nba_players_stats$BMI[175] = (nba_players_stats$Weight[175]/(nba_players_stats$Height[175])^2)*10000
+nba_players_stats$Age[175] = 35
+nba_players_stats$Team[175] = "LAC"
+nba_players_stats$College[175] = "no college"
+nba_players_stats$Birth_Place[175] = "tu"
+nba_players_stats$Birthdate[175] = "19-Mar-79"
+#Henry Sims
+nba_players_stats$Height[176] = 208.28
+nba_players_stats$Weight[176] = 247/2.205
+nba_players_stats$BMI[176] = (nba_players_stats$Weight[176]/(nba_players_stats$Height[176])^2)*10000
+nba_players_stats$Age[176] = 24
+nba_players_stats$Team[176] = "PHI"
+nba_players_stats$College[176] = "Georgetown University"
+nba_players_stats$Birth_Place[176] = "tu"
+nba_players_stats$Birthdate[176] = "27-Mar-90"
+#Henry Walker
+nba_players_stats$Height[177] = 198.12
+nba_players_stats$Weight[177] = 220/2.205
+nba_players_stats$BMI[177] = (nba_players_stats$Weight[177]/(nba_players_stats$Height[177])^2)*10000
+nba_players_stats$Age[177] = 27
+nba_players_stats$Team[177] = "MIA"
+nba_players_stats$College[177] = "Kansas State University"
+nba_players_stats$Birth_Place[177] = "us"
+nba_players_stats$Birthdate[177] = "9-Oct-87"
+#Hollis Thompson
+nba_players_stats$Height[178] = 203.2
+nba_players_stats$Weight[178] = 205/2.205
+nba_players_stats$BMI[178] = (nba_players_stats$Weight[178]/(nba_players_stats$Height[178])^2)*10000
+nba_players_stats$Age[178] = 23
+nba_players_stats$Team[178] = "PHI"
+nba_players_stats$College[178] = "Georgetown University"
+nba_players_stats$Birth_Place[178] = "us"
+nba_players_stats$Birthdate[178] = "3-Apr-91"
+#Ish Smith
+nba_players_stats$Height[184] = 182.88
+nba_players_stats$Weight[184] = 174/2.205
+nba_players_stats$BMI[184] = (nba_players_stats$Weight[184]/(nba_players_stats$Height[184])^2)*10000
+nba_players_stats$Age[184] = 26
+nba_players_stats$Team[184] = "OKC"
+nba_players_stats$College[184] = "Wake Forest University"
+nba_players_stats$Birth_Place[184] = "us"
+nba_players_stats$Birthdate[184] = "5-Jul-88"
+#Jabari Parker
+nba_players_stats$Height[187] = 203.2
+nba_players_stats$Weight[187] = 245/2.205
+nba_players_stats$BMI[187] = (nba_players_stats$Weight[187]/(nba_players_stats$Height[187])^2)*10000
+nba_players_stats$Age[187] = 19
+nba_players_stats$Team[187] = "MIL"
+nba_players_stats$College[187] = "Duke University"
+nba_players_stats$Birth_Place[187] = "us"
+nba_players_stats$Birthdate[187] = "15-Mar-95"
+#JaKarr Sampson
+nba_players_stats$Height[190] = 200.66
+nba_players_stats$Weight[190] = 214/2.205
+nba_players_stats$BMI[190] = (nba_players_stats$Weight[190]/(nba_players_stats$Height[190])^2)*10000
+nba_players_stats$Age[190] = 21
+nba_players_stats$Team[190] = "PHI"
+nba_players_stats$College[190] = "St John's University Queens Campus"
+nba_players_stats$Birth_Place[190] = "us"
+nba_players_stats$Birthdate[190] = "20-Mar-93"
+#James Young
+nba_players_stats$Height[199] = 198.12
+nba_players_stats$Weight[199] = 216/2.205
+nba_players_stats$BMI[199] = (nba_players_stats$Weight[199]/(nba_players_stats$Height[199])^2)*10000
+nba_players_stats$Age[199] = 19
+nba_players_stats$Team[199] = "BOS"
+nba_players_stats$College[199] = "University of Kentucky"
+nba_players_stats$Birth_Place[199] = "us"
+nba_players_stats$Birthdate[199] = "16-Aug-95"
+#Jarnell Stokes
+nba_players_stats$Height[205] = 205.74
+nba_players_stats$Weight[205] = 249/2.205
+nba_players_stats$BMI[205] = (nba_players_stats$Weight[205]/(nba_players_stats$Height[205])^2)*10000
+nba_players_stats$Age[205] = 21
+nba_players_stats$Team[205] = "MEM"
+nba_players_stats$College[205] = "University of Tennessee"
+nba_players_stats$Birth_Place[205] = "us"
+nba_players_stats$Birthdate[205] = "7-Jan-94"
+#Jason Smith
+nba_players_stats$Height[209] = 213.36
+nba_players_stats$Weight[209] = 240/2.205
+nba_players_stats$BMI[209] = (nba_players_stats$Weight[209]/(nba_players_stats$Height[209])^2)*10000
+nba_players_stats$Age[209] = 28
+nba_players_stats$Team[209] = "NYK"
+nba_players_stats$College[209] = "Colorado State University"
+nba_players_stats$Birth_Place[209] = "us"
+nba_players_stats$Birthdate[209] = "2-Mar-86"
+#Jason Terry
+nba_players_stats$Height[210] = 187.96
+nba_players_stats$Weight[210] = 185/2.205
+nba_players_stats$BMI[210] = (nba_players_stats$Weight[210]/(nba_players_stats$Height[210])^2)*10000
+nba_players_stats$Age[210] = 37
+nba_players_stats$Team[210] = "HOU"
+nba_players_stats$College[210] = "University of Arizona"
+nba_players_stats$Birth_Place[210] = "us"
+nba_players_stats$Birthdate[210] = "15-Sep-77"
+#Jason Thompson
+nba_players_stats$Height[211] = 210.82
+nba_players_stats$Weight[211] = 249/2.205
+nba_players_stats$BMI[211] = (nba_players_stats$Weight[211]/(nba_players_stats$Height[211])^2)*10000
+nba_players_stats$Age[211] = 28
+nba_players_stats$Team[211] = "SAC"
+nba_players_stats$College[211] = "Rider University"
+nba_players_stats$Birth_Place[211] = "us"
+nba_players_stats$Birthdate[211] = "21-Jul-86"
+#Jeff Withey
+nba_players_stats$Height[217] = 213.36
+nba_players_stats$Weight[217] = 229/2.205
+nba_players_stats$BMI[217] = (nba_players_stats$Weight[217]/(nba_players_stats$Height[217])^2)*10000
+nba_players_stats$Age[217] = 24
+nba_players_stats$Team[217] = "NOP"
+nba_players_stats$College[217] = "University of Kansas"
+nba_players_stats$Birth_Place[217] = "us"
+nba_players_stats$Birthdate[217] = "7-Mar-90"
+#John Salmons
+nba_players_stats$Height[243] = 198.12
+nba_players_stats$Weight[243] = 207/2.205
+nba_players_stats$BMI[243] = (nba_players_stats$Weight[243]/(nba_players_stats$Height[243])^2)*10000
+nba_players_stats$Age[243] = 35
+nba_players_stats$Team[243] = "NOP"
+nba_players_stats$College[243] = "University of Miami"
+nba_players_stats$Birth_Place[243] = "us"
+nba_players_stats$Birthdate[243] = "12-Dec-79"
+#John Wall
+nba_players_stats$Height[244] = 193.04
+nba_players_stats$Weight[244] = 209/2.205
+nba_players_stats$BMI[244] = (nba_players_stats$Weight[244]/(nba_players_stats$Height[244])^2)*10000
+nba_players_stats$Age[244] = 24
+nba_players_stats$Team[244] = "WAS"
+nba_players_stats$College[244] = "University of Kentucky"
+nba_players_stats$Birth_Place[244] = "us"
+nba_players_stats$Birthdate[244] = "6-Sep-90"
+#Josh Smith
+nba_players_stats$Height[257] = 205.74
+nba_players_stats$Weight[257] = 225/2.205
+nba_players_stats$BMI[257] = (nba_players_stats$Weight[257]/(nba_players_stats$Height[257])^2)*10000
+nba_players_stats$Age[257] = 29
+nba_players_stats$Team[257] = "HOU"
+nba_players_stats$College[257] = "no college"
+nba_players_stats$Birth_Place[257] = "us"
+nba_players_stats$Birthdate[257] = "5-Dec-85"
+#Jusuf Nurkic
+nba_players_stats$Height[263] = 213.36
+nba_players_stats$Weight[263] = 290/2.205
+nba_players_stats$BMI[263] = (nba_players_stats$Weight[263]/(nba_players_stats$Height[263])^2)*10000
+nba_players_stats$Age[263] = 20
+nba_players_stats$Team[263] = "DEN"
+nba_players_stats$College[263] = "no college"
+nba_players_stats$Birth_Place[263] = "b&h"
+nba_players_stats$Birthdate[263] = "23-Aug-94"
+#Lance Thomas
+nba_players_stats$Height[295] = 203.2
+nba_players_stats$Weight[295] = 240/2.205
+nba_players_stats$BMI[295] = (nba_players_stats$Weight[295]/(nba_players_stats$Height[295])^2)*10000
+nba_players_stats$Age[295] = 26
+nba_players_stats$Team[295] = "OKC"
+nba_players_stats$College[295] = "Duke University"
+nba_players_stats$Birth_Place[295] = "us"
+nba_players_stats$Birthdate[295] = "24-Apr-88"
+#Larry Sanders
+nba_players_stats$Height[299] = 210.82
+nba_players_stats$Weight[299] = 229/2.205
+nba_players_stats$BMI[299] = (nba_players_stats$Weight[299]/(nba_players_stats$Height[299])^2)*10000
+nba_players_stats$Age[299] = 26
+nba_players_stats$Team[299] = "MIL"
+nba_players_stats$College[299] = "Virginia Commonwealth University"
+nba_players_stats$Birth_Place[299] = "us"
+nba_players_stats$Birthdate[299] = "21-Nov-88"
+#Marcus Thornton
+nba_players_stats$Height[320] = 193.04
+nba_players_stats$Weight[320] = 205/2.205
+nba_players_stats$BMI[320] = (nba_players_stats$Weight[320]/(nba_players_stats$Height[320])^2)*10000
+nba_players_stats$Age[320] = 27
+nba_players_stats$Team[320] = "BOS"
+nba_players_stats$College[320] = "Killgore College"
+nba_players_stats$Birth_Place[320] = "us"
+nba_players_stats$Birthdate[320] = "5-Jun-87"
+#Martell Webster
+nba_players_stats$Height[325] = 200.66
+nba_players_stats$Weight[325] = 229/2.205
+nba_players_stats$BMI[325] = (nba_players_stats$Weight[325]/(nba_players_stats$Height[325])^2)*10000
+nba_players_stats$Age[325] = 28
+nba_players_stats$Team[325] = "WAS"
+nba_players_stats$College[325] = "no college"
+nba_players_stats$Birth_Place[325] = "us"
+nba_players_stats$Birthdate[325] = "4-Dec-86"
+#Miroslav Raduljica
+nba_players_stats$Height[342] = 213.36
+nba_players_stats$Weight[342] = 243/2.205
+nba_players_stats$BMI[342] = (nba_players_stats$Weight[342]/(nba_players_stats$Height[342])^2)*10000
+nba_players_stats$Age[342] = 27
+nba_players_stats$Team[342] = "LAC"
+nba_players_stats$College[342] = "no college"
+nba_players_stats$Birth_Place[342] = "sfry"
+nba_players_stats$Birthdate[342] = "5-Jan-88"
+#Mirza Teletovic
+nba_players_stats$Height[343] = 205.74
+nba_players_stats$Weight[343] = 243/2.205
+nba_players_stats$BMI[343] = (nba_players_stats$Weight[343]/(nba_players_stats$Height[343])^2)*10000
+nba_players_stats$Age[343] = 29
+nba_players_stats$Team[343] = "BKN"
+nba_players_stats$College[343] = "no college"
+nba_players_stats$Birth_Place[343] = "sfry"
+nba_players_stats$Birthdate[343] = "18-Sep-85"
+#Nate Robinson
+nba_players_stats$Height[347] = 175.26
+nba_players_stats$Weight[347] = 181/2.205
+nba_players_stats$BMI[347] = (nba_players_stats$Weight[347]/(nba_players_stats$Height[347])^2)*10000
+nba_players_stats$Age[347] = 30
+nba_players_stats$Team[347] = "DEN"
+nba_players_stats$College[347] = "University of Washington"
+nba_players_stats$Birth_Place[347] = "us"
+nba_players_stats$Birthdate[347] = "31-May-84"
+#Nate Wolters
+nba_players_stats$Height[348] = 193.04
+nba_players_stats$Weight[348] = 190/2.205
+nba_players_stats$BMI[348] = (nba_players_stats$Weight[348]/(nba_players_stats$Height[348])^2)*10000
+nba_players_stats$Age[348] = 23
+nba_players_stats$Team[348] = "MIL"
+nba_players_stats$College[348] = "South Dakota State University"
+nba_players_stats$Birth_Place[348] = "us"
+nba_players_stats$Birthdate[348] = "15-May-91"
+#Nick Young
+nba_players_stats$Height[355] = 200.66
+nba_players_stats$Weight[355] = 210/2.205
+nba_players_stats$BMI[355] = (nba_players_stats$Weight[355]/(nba_players_stats$Height[355])^2)*10000
+nba_players_stats$Age[355] = 29
+nba_players_stats$Team[355] = "LAL"
+nba_players_stats$College[355] = "University of Southern California"
+nba_players_stats$Birth_Place[355] = "us"
+nba_players_stats$Birthdate[355] = "1-Jun-85"
+#Nikola Pekovic
+nba_players_stats$Height[359] = 210.82
+nba_players_stats$Weight[359] = 307/2.205
+nba_players_stats$BMI[359] = (nba_players_stats$Weight[359]/(nba_players_stats$Height[359])^2)*10000
+nba_players_stats$Age[359] = 29
+nba_players_stats$Team[359] = "MIN"
+nba_players_stats$College[359] = "no college"
+nba_players_stats$Birth_Place[359] = "sfry"
+nba_players_stats$Birthdate[359] = "3-Jan-86"
+#Patrick Patterson
+nba_players_stats$Height[371] = 205.74
+nba_players_stats$Weight[371] = 229/2.205
+nba_players_stats$BMI[371] = (nba_players_stats$Weight[371]/(nba_players_stats$Height[371])^2)*10000
+nba_players_stats$Age[371] = 25
+nba_players_stats$Team[371] = "TOR"
+nba_players_stats$College[371] = "University of Kentucky"
+nba_players_stats$Birth_Place[371] = "us"
+nba_players_stats$Birthdate[371] = "14-Mar-89"
+#PJ Tucker
+nba_players_stats$Height[381] = 195.58
+nba_players_stats$Weight[381] = 245/2.205
+nba_players_stats$BMI[381] = (nba_players_stats$Weight[381]/(nba_players_stats$Height[381])^2)*10000
+nba_players_stats$Age[381] = 29
+nba_players_stats$Team[381] = "PHX"
+nba_players_stats$College[381] = "University of Texas"
+nba_players_stats$Birth_Place[381] = "us"
+nba_players_stats$Birthdate[381] = "5-May-85"
+#Reggie Williams
+nba_players_stats$Height[394] = 193.04
+nba_players_stats$Weight[394] = 212/2.205
+nba_players_stats$BMI[394] = (nba_players_stats$Weight[394]/(nba_players_stats$Height[394])^2)*10000
+nba_players_stats$Age[394] = 31
+nba_players_stats$Team[394] = "MIA"
+nba_players_stats$College[394] = "Virginia Military Institute"
+nba_players_stats$Birth_Place[394] = "us"
+nba_players_stats$Birthdate[394] = "14-Sep-86"
+#Ricky Ledo
+nba_players_stats$Height[396] = 200.66
+nba_players_stats$Weight[396] = 195/2.205
+nba_players_stats$BMI[396] = (nba_players_stats$Weight[396]/(nba_players_stats$Height[396])^2)*10000
+nba_players_stats$Age[396] = 22
+nba_players_stats$Team[396] = "DAL"
+nba_players_stats$College[396] = "Providence College"
+nba_players_stats$Birth_Place[396] = "us"
+nba_players_stats$Birthdate[396] = "10-Sep-92"
+#Robert Sacre
+nba_players_stats$Height[400] = 213.36
+nba_players_stats$Weight[400] = 269/2.205
+nba_players_stats$BMI[400] = (nba_players_stats$Weight[400]/(nba_players_stats$Height[400])^2)*10000
+nba_players_stats$Age[400] = 25
+nba_players_stats$Team[400] = "LAL"
+nba_players_stats$College[400] = "Gonzaga University"
+nba_players_stats$Birth_Place[400] = "us"
+nba_players_stats$Birthdate[400] = "6-Jun-89"
+#Ronny Turiaf
+nba_players_stats$Height[405] = 208.28
+nba_players_stats$Weight[405] = 240/2.205
+nba_players_stats$BMI[405] = (nba_players_stats$Weight[405]/(nba_players_stats$Height[405])^2)*10000
+nba_players_stats$Age[405] = 32
+nba_players_stats$Team[405] = "MIN"
+nba_players_stats$College[405] = "Gonzaga University"
+nba_players_stats$Birth_Place[405] = "fr"
+nba_players_stats$Birthdate[405] = "13-Jan-83"
+#Russell Westbrook
+nba_players_stats$Height[410] = 190.5
+nba_players_stats$Weight[410] = 200/2.205
+nba_players_stats$BMI[410] = (nba_players_stats$Weight[410]/(nba_players_stats$Height[410])^2)*10000
+nba_players_stats$Age[410] = 26
+nba_players_stats$Team[410] = "OKC"
+nba_players_stats$College[410] = "University of California, Los Angeles"
+nba_players_stats$Birth_Place[410] = "us"
+nba_players_stats$Birthdate[410] = "12-Nov-88"
+#Sebastian Telfair
+nba_players_stats$Height[416] = 182.88
+nba_players_stats$Weight[416] = 170/2.205
+nba_players_stats$BMI[416] = (nba_players_stats$Weight[416]/(nba_players_stats$Height[416])^2)*10000
+nba_players_stats$Age[416] = 29
+nba_players_stats$Team[416] = "OKC"
+nba_players_stats$College[416] = "no college"
+nba_players_stats$Birth_Place[416] = "us"
+nba_players_stats$Birthdate[416] = "9-Jun-85"
+#Shabazz Napier
+nba_players_stats$Height[421] = 185.42
+nba_players_stats$Weight[421] = 181/2.205
+nba_players_stats$BMI[421] = (nba_players_stats$Weight[421]/(nba_players_stats$Height[421])^2)*10000
+nba_players_stats$Age[421] = 23
+nba_players_stats$Team[421] = "MIA"
+nba_players_stats$College[421] = "University of Connecticut"
+nba_players_stats$Birth_Place[421] = "us"
+nba_players_stats$Birthdate[421] = "14-Jul-91"
+#Shayne Whittington
+nba_players_stats$Height[428] = 208.28
+nba_players_stats$Weight[428] = 245/2.205
+nba_players_stats$BMI[428] = (nba_players_stats$Weight[428]/(nba_players_stats$Height[428])^2)*10000
+nba_players_stats$Age[428] = 23
+nba_players_stats$Team[428] = "IND"
+nba_players_stats$College[428] = "Western Michigan University"
+nba_players_stats$Birth_Place[428] = "us"
+nba_players_stats$Birthdate[428] = "27-Mar-91"
+#Thaddeus Young
+nba_players_stats$Height[444] = 203.2
+nba_players_stats$Weight[444] = 220/2.205
+nba_players_stats$BMI[444] = (nba_players_stats$Weight[444]/(nba_players_stats$Height[444])^2)*10000
+nba_players_stats$Age[444] = 26
+nba_players_stats$Team[444] = "MIN"
+nba_players_stats$College[444] = "Georgia Institute of Technology"
+nba_players_stats$Birth_Place[444] = "us"
+nba_players_stats$Birthdate[444] = "21-Jun-88"
+#Thomas Robinson
+nba_players_stats$Height[445] = 205.74
+nba_players_stats$Weight[445] = 238/2.205
+nba_players_stats$BMI[445] = (nba_players_stats$Weight[445]/(nba_players_stats$Height[445])^2)*10000
+nba_players_stats$Age[445] = 23
+nba_players_stats$Team[445] = "POR"
+nba_players_stats$College[445] = "University of Kansas"
+nba_players_stats$Birth_Place[445] = "us"
+nba_players_stats$Birthdate[445] = "17-Mar-91"
+#TJ Warren
+nba_players_stats$Height[451] = 203.2
+nba_players_stats$Weight[451] = 220/2.205
+nba_players_stats$BMI[451] = (nba_players_stats$Weight[451]/(nba_players_stats$Height[451])^2)*10000
+nba_players_stats$Age[451] = 21
+nba_players_stats$Team[451] = "PHX"
+nba_players_stats$College[451] = "North Carolina State University"
+nba_players_stats$Birth_Place[451] = "us"
+nba_players_stats$Birthdate[451] = "5-Sep-93"
+#Tony Wroten
+nba_players_stats$Height[457] = 198.12
+nba_players_stats$Weight[457] = 205/2.205
+nba_players_stats$BMI[457] = (nba_players_stats$Weight[457]/(nba_players_stats$Height[457])^2)*10000
+nba_players_stats$Age[457] = 21
+nba_players_stats$Team[457] = "PHI"
+nba_players_stats$College[457] = "University of Washington"
+nba_players_stats$Birth_Place[457] = "us"
+nba_players_stats$Birthdate[457] = "13-Apr-93"
+#Travis Wear
+nba_players_stats$Height[459] = 205.74
+nba_players_stats$Weight[459] = 218/2.205
+nba_players_stats$BMI[459] = (nba_players_stats$Weight[459]/(nba_players_stats$Height[459])^2)*10000
+nba_players_stats$Age[459] = 24
+nba_players_stats$Team[459] = "NYK"
+nba_players_stats$College[459] = "University of North Carolina at Chapel Hill"
+nba_players_stats$Birth_Place[459] = "us"
+nba_players_stats$Birthdate[459] = "21-Sep-90"
+#Tristan Thompson
+nba_players_stats$Height[463] = 205.74
+nba_players_stats$Weight[463] = 254/2.205
+nba_players_stats$BMI[463] = (nba_players_stats$Weight[463]/(nba_players_stats$Height[463])^2)*10000
+nba_players_stats$Age[463] = 23
+nba_players_stats$Team[463] = "CLE"
+nba_players_stats$College[463] = "University of Texas at Austin"
+nba_players_stats$Birth_Place[463] = "ca"
+nba_players_stats$Birthdate[463] = "13-Mar-91"
+#Tyler Zeller
+nba_players_stats$Height[469] = 213.36
+nba_players_stats$Weight[469] = 253/2.205
+nba_players_stats$BMI[469] = (nba_players_stats$Weight[469]/(nba_players_stats$Height[469])^2)*10000
+nba_players_stats$Age[469] = 25
+nba_players_stats$Team[469] = "BOS"
+nba_players_stats$College[469] = "University of North Carolina at Chapel Hill"
+nba_players_stats$Birth_Place[469] = "us"
+nba_players_stats$Birthdate[469] = "17-Jan-90"
+#Tyrus Thomas
+nba_players_stats$Height[471] = 208.28
+nba_players_stats$Weight[471] = 225/2.205
+nba_players_stats$BMI[471] = (nba_players_stats$Weight[471]/(nba_players_stats$Height[471])^2)*10000
+nba_players_stats$Age[471] = 28
+nba_players_stats$Team[471] = "MEM"
+nba_players_stats$College[471] = "Louisiana State University"
+nba_players_stats$Birth_Place[471] = "us"
+nba_players_stats$Birthdate[471] = "17-Aug-86"
+#Al Jefferson
+nba_players_stats$College[6] = "no college"
+#Alexey Shved
+nba_players_stats$College[11] = "no college"
+#Alexis Ajinca
+nba_players_stats$College[12] = "no college"
+#Amir Johnson
+nba_players_stats$College[17] = "no college"
+#Andrea Bargnani
+nba_players_stats$College[24] = "no college"
+#Andrei Kirilenko
+nba_players_stats$College[25] = "no college"
+#Bismack Biyombo
+nba_players_stats$College[44] = "no college"
+#Bojan Bogdanovic
+nba_players_stats$College[46] = "no college"
+#Boris Diaw
+nba_players_stats$College[47] = "no college"
+#Brandon Jennings
+nba_players_stats$College[52] = "no college"
+#Bruno Caboclo
+nba_players_stats$College[58] = "no college"
+#CJ Miles
+nba_players_stats$College[80] = "no college"
+#Clint Capela
+nba_players_stats$College[83] = "no college"
+#Damjan Rudez
+nba_players_stats$College[93] = "no college"
+#Danilo Gallinari
+nba_players_stats$College[94] = "no college"
+#Dante Exum
+nba_players_stats$College[98] = "no college"
+#Dennis Schroder
+nba_players_stats$College[112] = "no college"
+#Dirk Nowitzki
+nba_players_stats$College[121] = "no college"
+#Donatas Motiejunas
+nba_players_stats$College[123] = "no college"
+#Dorell Wright
+nba_players_stats$College[124] = "no college"
+#Dwight Howard
+nba_players_stats$College[130] = "no college"
+#Enes Kanter
+nba_players_stats$College[141] = "no college"
+#Ersan Ilyasova
+nba_players_stats$College[145] = "no college"
+#Evan Fournier
+nba_players_stats$College[147] = "no college"
+#Furkan Aldemir
+nba_players_stats$College[151] = "no college"
+#Gerald Green
+nba_players_stats$College[157] = "no college"
+#Giannis Antetokounmpo
+nba_players_stats$College[160] = "no college"
+#Goran Dragic
+nba_players_stats$College[165] = "no college"
+#Ian Mahinmi
+nba_players_stats$College[180] = "no college"
+#Joe Ingles
+nba_players_stats$College[234] = "no college"
+#Joel Freeland
+nba_players_stats$College[237] = "no college"
+#Joffrey Lauvergne
+nba_players_stats$College[239] = "no college"
+#Jonas Jerebko
+nba_players_stats$College[247] = "no college"
+#Jonas Valanciunas
+nba_players_stats$College[248] = "no college"
+#Jose Calderon
+nba_players_stats$College[255] = "no college"
+#JR Smith
+nba_players_stats$College[258] = "no college"
+#Kendrick Perkins
+nba_players_stats$College[269] = "no college"
+#Kevin Garnett
+nba_players_stats$College[275] = "no college"
+#Kevin Seraphin
+nba_players_stats$College[278] = "no college"
+#Kobe Bryant
+nba_players_stats$College[283] = "no college"
+#Kostas Papanikolaou
+nba_players_stats$College[285] = "no college"
+#Leandro Barbosa
+nba_players_stats$College[301] = "no college"
+#Lebron James
+nba_players_stats$College[302] = "no college"
+#Lou Williams
+nba_players_stats$College[306] = "no college"
+#Lucas Nogueira
+nba_players_stats$College[308] = "no college"
+#Luis Scola
+nba_players_stats$College[309] = "no college"
+#Manu Ginobili
+nba_players_stats$College[314] = "no college"
+#Marc Gasol
+nba_players_stats$College[315] = "no college"
+#Marcin Gortat
+nba_players_stats$College[316] = "no college"
+#Marco Belinelli
+nba_players_stats$College[317] = "no college"
+#Monta Ellis
+nba_players_stats$College[346] = "no college"
+#Nene
+nba_players_stats$College[350] = "no college"
+#Nicolas Batum
+nba_players_stats$College[356] = "no college"
+#Nikola Mirotic
+nba_players_stats$College[358] = "no college"
+#Ognjen Kuzmic
+nba_players_stats$College[364] = "no college"
+#Omer Asik
+nba_players_stats$College[365] = "no college"
+#Omri Casspi
+nba_players_stats$College[366] = "no college"
+#Pablo Prigioni
+nba_players_stats$College[368] = "no college"
+#Pau Gasol
+nba_players_stats$College[373] = "no college"
+#Pero Antic
+nba_players_stats$College[377] = "no college"
+#Ricky Rubio
+nba_players_stats$College[397] = "no college"
+#Rudy Gobert
+nba_players_stats$College[408] = "no college"
+#Serge Ibaka
+nba_players_stats$College[417] = "no college"
+#Sergey Karasev
+nba_players_stats$College[418] = "no college"
+#Shaun Livingston
+nba_players_stats$College[424] = "no college"
+#Thabo Sefolosha
+nba_players_stats$College[443] = "no college"
+#Tiago Splitter
+nba_players_stats$College[446] = "no college"
+#Timofey Mozgov
+nba_players_stats$College[450] = "no college"
+#Tony Parker
+nba_players_stats$College[455] = "no college"
+#Tyson Chandler
+nba_players_stats$College[472] = "no college"
+#Victor Claver
+nba_players_stats$College[475] = "no college"
+#Zaza Pachulia
+nba_players_stats$College[489] = "no college"
+#Zoran Dragic
+nba_players_stats$College[490] = "no college"
+```
+```{r Adding missing position data,echo=FALSE}
+nba_players_stats$Pos[16] = "PF"
+nba_players_stats$Pos[18] = "C"
+nba_players_stats$Pos[28] = "SF"
+nba_players_stats$Pos[32] = "PF"
+nba_players_stats$Pos[42] = "PG"
+nba_players_stats$Pos[49] = "PF"
+nba_players_stats$Pos[69] = "PF"
+nba_players_stats$Pos[81] = "SG"
+nba_players_stats$Pos[84] = "PF"
+nba_players_stats$Pos[105] = "PF"
+nba_players_stats$Pos[113] = "PG"
+nba_players_stats$Pos[116] = "PF"
+nba_players_stats$Pos[120] = "SG"
+nba_players_stats$Pos[124] = "SF"
+nba_players_stats$Pos[132] = "PG"
+nba_players_stats$Pos[136] = "C"
+nba_players_stats$Pos[138] = "SF"
+nba_players_stats$Pos[139] = "PG"
+nba_players_stats$Pos[149] = "C"
+nba_players_stats$Pos[159] = "PF"
+nba_players_stats$Pos[161] = "SF"
+nba_players_stats$Pos[164] = "SF"
+nba_players_stats$Pos[174] = "C"
+nba_players_stats$Pos[175] = "PF"
+nba_players_stats$Pos[176] = "C"
+nba_players_stats$Pos[177] = "SF"
+nba_players_stats$Pos[178] = "SF"
+nba_players_stats$Pos[184] = "PG"
+nba_players_stats$Pos[187] = "PF"
+nba_players_stats$Pos[190] = "SF"
+nba_players_stats$Pos[199] = "SG"
+nba_players_stats$Pos[205] = "C"
+nba_players_stats$Pos[209] = "PF"
+nba_players_stats$Pos[210] = "PG"
+nba_players_stats$Pos[211] = "C"
+nba_players_stats$Pos[217] = "C"
+nba_players_stats$Pos[243] = "SF"
+nba_players_stats$Pos[244] = "PG"
+nba_players_stats$Pos[257] = "PF"
+nba_players_stats$Pos[263] = "C"
+nba_players_stats$Pos[295] = "PF"
+nba_players_stats$Pos[299] = "PF"
+nba_players_stats$Pos[320] = "PG"
+nba_players_stats$Pos[325] = "SF"
+nba_players_stats$Pos[342] = "C"
+nba_players_stats$Pos[343] = "PF"
+nba_players_stats$Pos[347] = "PG"
+nba_players_stats$Pos[348] = "PG"
+nba_players_stats$Pos[355] = "SF"
+nba_players_stats$Pos[359] = "C"
+nba_players_stats$Pos[371] = "PF"
+nba_players_stats$Pos[381] = "C"
+nba_players_stats$Pos[394] = "SF"
+nba_players_stats$Pos[396] = "SG"
+nba_players_stats$Pos[400] = "C"
+nba_players_stats$Pos[405] = "PF"
+nba_players_stats$Pos[410] = "PG"
+nba_players_stats$Pos[416] = "PG"
+nba_players_stats$Pos[421] = "PG"
+nba_players_stats$Pos[428] = "PF"
+nba_players_stats$Pos[444] = "PF"
+nba_players_stats$Pos[445] = "C"
+nba_players_stats$Pos[451] = "PF"
+nba_players_stats$Pos[457] = "PG"
+nba_players_stats$Pos[459] = "SF"
+nba_players_stats$Pos[463] = "PF"
+nba_players_stats$Pos[469] = "PF"
+nba_players_stats$Pos[471] = "PF"
+```
+```{r Adding Salary column,echo=FALSE}
+nba_players_stats$Salary = NA
+nba_players_stats$Salary[1] = 530802
+nba_players_stats$Salary[2] = 983595
+nba_players_stats$Salary[3] = 4290174
+nba_players_stats$Salary[4] = 1993879
+nba_players_stats$Salary[5] = 12896187
+nba_players_stats$Salary[6] = 14508210
+nba_players_stats$Salary[7] = 1371360
+nba_players_stats$Salary[8] = 3440454
+nba_players_stats$Salary[9] = 230918
+nba_players_stats$Salary[10] = 3922504
+nba_players_stats$Salary[11] = 3437610
+nba_players_stats$Salary[12] = 1054353
+nba_players_stats$Salary[13] = 1054353
+nba_players_stats$Salary[14] = 926376
+nba_players_stats$Salary[15] = 1142799
+nba_players_stats$Salary[16] = 23531949
+nba_players_stats$Salary[17] = 7522775
+nba_players_stats$Salary[18] = 10531886
+nba_players_stats$Salary[19] = 291987
+nba_players_stats$Salary[20] = 2760170
+nba_players_stats$Salary[21] = 13207355
+nba_players_stats$Salary[22] = 4970405
+nba_players_stats$Salary[23] = 1247577
+nba_players_stats$Salary[24] = 12896187
+nba_players_stats$Salary[25] = 3574645
+nba_players_stats$Salary[26] = 13941824
+nba_players_stats$Salary[27] = 1661286
+nba_players_stats$Salary[28] = 5922187
+nba_players_stats$Salary[29] = 5979446
+nba_players_stats$Salary[30] = 6026001
+nba_players_stats$Salary[31] = 3438983
+nba_players_stats$Salary[32] = 3224046
+nba_players_stats$Salary[33] = 1195347
+nba_players_stats$Salary[34] = 51614
+nba_players_stats$Salary[35] = 2256832
+nba_players_stats$Salary[36] = 8127284
+nba_players_stats$Salary[37] = 1357913
+nba_players_stats$Salary[38] = 2622052
+nba_players_stats$Salary[39] = 7728052
+nba_players_stats$Salary[40] = 4836070
+nba_players_stats$Salary[41] = 3252289
+nba_players_stats$Salary[42] = 2232115
+nba_players_stats$Salary[43] = 1353857
+nba_players_stats$Salary[44] = 4391638
+nba_players_stats$Salary[45] = 18949537
+nba_players_stats$Salary[46] = 3522808
+nba_players_stats$Salary[47] = 8597458
+nba_players_stats$Salary[48] = 4841744
+nba_players_stats$Salary[49] = 5373411
+nba_players_stats$Salary[50] = 7469041
+nba_players_stats$Salary[51] = 139360
+nba_players_stats$Salary[52] = 8597458
+nba_players_stats$Salary[53] = 3819331
+nba_players_stats$Salary[54] = 1231247
+nba_players_stats$Salary[55] = 10529736
+nba_players_stats$Salary[56] = 2936032
+nba_players_stats$Salary[57] = 16892930
+nba_players_stats$Salary[58] = 1567273
+nba_players_stats$Salary[59] = 163566
+nba_players_stats$Salary[60] = 2232115
+nba_players_stats$Salary[61] = 545225
+nba_players_stats$Salary[62] = 7254105
+nba_players_stats$Salary[63] = 18054661
+nba_players_stats$Salary[64] = 24135645
+nba_players_stats$Salary[65] = 4836070
+nba_players_stats$Salary[66] = 1231247
+nba_players_stats$Salary[67] = 15797829
+nba_players_stats$Salary[68] = 9219793
+nba_players_stats$Salary[69] = 1415151
+nba_players_stats$Salary[70] = 5373411
+nba_players_stats$Salary[71] = 5695816
+nba_players_stats$Salary[72] = 22186170
+nba_players_stats$Salary[73] = 3363755
+nba_players_stats$Salary[74] = 983595
+nba_players_stats$Salary[75] = 8000000
+nba_players_stats$Salary[76] = 5158474
+nba_players_stats$Salary[77] = 21567329
+nba_players_stats$Salary[78] = 6403763
+nba_players_stats$Salary[79] = 2601805
+nba_players_stats$Salary[80] = 4519039
+nba_players_stats$Salary[81] = 1192639
+nba_players_stats$Salary[82] = 545225
+nba_players_stats$Salary[83] = 1278012
+nba_players_stats$Salary[84] = 4331571
+nba_players_stats$Salary[85] = 1054353
+nba_players_stats$Salary[86] = 5053693
+nba_players_stats$Salary[87] = 545225
+nba_players_stats$Salary[88] = 2294009
+nba_players_stats$Salary[89] = 5857018
+nba_players_stats$Salary[90] = 3224046
+nba_players_stats$Salary[91] = 775027
+nba_players_stats$Salary[92] = 3590427
+nba_players_stats$Salary[93] = 1182150
+nba_players_stats$Salary[94] = 11665515
+nba_players_stats$Salary[95] = 2256832
+nba_players_stats$Salary[96] = 4325596
+nba_players_stats$Salary[97] = 894072
+nba_players_stats$Salary[98] = 3884976
+nba_players_stats$Salary[99] = 983595
+nba_players_stats$Salary[100] = 863130
+nba_players_stats$Salary[101] = 3715336
+nba_players_stats$Salary[102] = 5155964
+nba_players_stats$Salary[103] = 16133130
+nba_players_stats$Salary[104] = 64143
+nba_players_stats$Salary[105] = 32071
+nba_players_stats$Salary[106] = 12896187
+nba_players_stats$Salary[107] = 12294497
+nba_players_stats$Salary[108] = 2149364
+nba_players_stats$Salary[109] = 10209481
+nba_players_stats$Salary[110] = 14724490
+nba_players_stats$Salary[111] = 2686705
+nba_players_stats$Salary[112] = 1816943
+nba_players_stats$Salary[113] = 21229773
+nba_players_stats$Salary[114] = 13917135
+nba_players_stats$Salary[115] = 20271598
+nba_players_stats$Salary[116] = 7178733
+nba_players_stats$Salary[117] = 4168580
+nba_players_stats$Salary[118] = 950963
+nba_players_stats$Salary[119] = 877458
+nba_players_stats$Salary[120] = 4365359
+nba_players_stats$Salary[121] = 8570034
+nba_players_stats$Salary[122] = 1018973
+nba_players_stats$Salary[123] = 1594742
+nba_players_stats$Salary[124] = 3379875
+nba_players_stats$Salary[125] = 2448083
+nba_players_stats$Salary[126] = 983595
+nba_players_stats$Salary[127] = 8735543
+nba_players_stats$Salary[128] = 79157
+nba_players_stats$Salary[129] = 51614
+nba_players_stats$Salary[130] = 23037180
+nba_players_stats$Salary[131] = 545225
+nba_players_stats$Salary[132] = 16120234
+nba_players_stats$Salary[133] = 419193
+nba_players_stats$Salary[134] = 134447
+nba_players_stats$Salary[135] = 1054353
+nba_players_stats$Salary[136] = 1054353
+nba_players_stats$Salary[137] = 2576916
+nba_players_stats$Salary[138] = 323927
+nba_players_stats$Salary[139] = 173572
+nba_players_stats$Salary[140] = 2149364
+nba_players_stats$Salary[141] = 6456805
+nba_players_stats$Salary[142] = 13970869
+nba_players_stats$Salary[143] = 16011624
+nba_players_stats$Salary[144] = 545225
+nba_players_stats$Salary[145] = 8489990
+nba_players_stats$Salary[146] = 1018973
+nba_players_stats$Salary[147] = 1594742
+nba_players_stats$Salary[148] = 3522808
+nba_players_stats$Salary[149] = 1195992
+nba_players_stats$Salary[150] = 1415151
+nba_players_stats$Salary[151] = 3020185
+nba_players_stats$Salary[152] = 954880
+nba_players_stats$Salary[153] = 1054353
+nba_players_stats$Salary[154] = 1632657
+nba_players_stats$Salary[155] = 3492717
+nba_players_stats$Salary[156] = 8597458
+nba_players_stats$Salary[157] = 3761387
+nba_players_stats$Salary[158] = 6448093
+nba_players_stats$Salary[159] = 10860583
+nba_players_stats$Salary[160] = 2013094
+nba_players_stats$Salary[161] = 1880693
+nba_players_stats$Salary[162] = 8412596
+nba_players_stats$Salary[163] = 505828
+nba_players_stats$Salary[164] = 545224
+nba_players_stats$Salary[165] = 8060117
+nba_players_stats$Salary[166] = 15847264
+nba_players_stats$Salary[167] = 1519041
+nba_players_stats$Salary[168] = 877458
+nba_players_stats$Salary[169] = 5889186
+nba_players_stats$Salary[170] = 1018973
+nba_players_stats$Salary[171] = 1054353
+nba_players_stats$Salary[172] = 6877966
+nba_players_stats$Salary[173] = 3277694
+nba_players_stats$Salary[174] = 833083
+nba_players_stats$Salary[175] = 1448490
+nba_players_stats$Salary[176] = 983595
+nba_players_stats$Salary[177] = 334907
+nba_players_stats$Salary[178] = 877458
+nba_players_stats$Salary[179] = 877456
+nba_players_stats$Salary[180] = 4298729
+nba_players_stats$Salary[181] = 2967319
+nba_players_stats$Salary[182] = 877458
+nba_players_stats$Salary[183] = 7779201
+nba_players_stats$Salary[184] = 305867
+nba_players_stats$Salary[185] = 6256883
+nba_players_stats$Salary[186] = 112250
+nba_players_stats$Salary[187] = 5298785
+nba_players_stats$Salary[188] = 163565
+nba_players_stats$Salary[189] = 983595
+nba_players_stats$Salary[190] = 545225
+nba_players_stats$Salary[191] = 929072
+nba_players_stats$Salary[192] = 5857018
+nba_players_stats$Salary[193] = 5104740
+nba_players_stats$Salary[194] = 545225
+nba_players_stats$Salary[195] = 15791280
+nba_players_stats$Salary[196] = 2686705
+nba_players_stats$Salary[197] = 1556666
+nba_players_stats$Salary[198] = 279024
+nba_players_stats$Salary[199] = 1799533
+nba_players_stats$Salary[200] = 262986
+nba_players_stats$Salary[201] = 1556666
+nba_players_stats$Salary[202] = 398400
+nba_players_stats$Salary[203] = 4567399
+nba_players_stats$Salary[204] = 1530906
+nba_players_stats$Salary[205] = 545225
+nba_players_stats$Salary[206] = 6770498
+nba_players_stats$Salary[207] = 1415151
+nba_players_stats$Salary[208] = 7094112
+nba_players_stats$Salary[209] = 3522808
+nba_players_stats$Salary[210] = 5857018
+nba_players_stats$Salary[211] = 6488394
+nba_players_stats$Salary[212] = 12090175
+nba_players_stats$Salary[213] = 1308637
+nba_players_stats$Salary[214] = 1965325
+nba_players_stats$Salary[215] = 9887077
+nba_players_stats$Salary[216] = 8597458
+nba_players_stats$Salary[217] = 877458
+nba_players_stats$Salary[218] = 983595
+nba_players_stats$Salary[219] = 950963
+nba_players_stats$Salary[220] = 64143
+nba_players_stats$Salary[221] = 1929054
+nba_players_stats$Salary[222] = 2366450
+nba_players_stats$Salary[223] = 16011624
+nba_players_stats$Salary[224] = 877458
+nba_players_stats$Salary[225] = 507336
+nba_players_stats$Salary[226] = 3224046
+nba_players_stats$Salary[227] = 1018973
+nba_players_stats$Salary[228] = 2277481
+nba_players_stats$Salary[229] = 5783671
+nba_players_stats$Salary[230] = 7299779
+nba_players_stats$Salary[231] = 13648465
+nba_players_stats$Salary[232] = 6448093
+nba_players_stats$Salary[233] = 950963
+nba_players_stats$Salary[234] = 545225
+nba_players_stats$Salary[235] = 24911984
+nba_players_stats$Salary[236] = 4083792
+nba_players_stats$Salary[237] = 3331515
+nba_players_stats$Salary[238] = 1018973
+nba_players_stats$Salary[239] = 1923983
+nba_players_stats$Salary[240] = 2135737
+nba_players_stats$Salary[241] = 1410971
+nba_players_stats$Salary[242] = 528709
+nba_players_stats$Salary[243] = 1074682
+nba_players_stats$Salary[244] = 14724490
+nba_players_stats$Salary[245] = 644809
+nba_players_stats$Salary[246] = 1039755
+nba_players_stats$Salary[247] = 4836070
+nba_players_stats$Salary[248] = 3953068
+nba_players_stats$Salary[249] = 1444501
+nba_players_stats$Salary[250] = 545225
+nba_players_stats$Salary[251] = 2256832
+nba_players_stats$Salary[252] = 1324663
+nba_players_stats$Salary[253] = 9672140
+nba_players_stats$Salary[254] = 1032302
+nba_players_stats$Salary[255] = 7627225
+nba_players_stats$Salary[256] = 5701189
+nba_players_stats$Salary[257] = 16061961
+nba_players_stats$Salary[258] = 6429152
+nba_players_stats$Salary[259] = 11821505
+nba_players_stats$Salary[260] = 3221209
+nba_players_stats$Salary[261] = 877458
+nba_players_stats$Salary[262] = 877458
+nba_players_stats$Salary[263] = 1894320
+nba_players_stats$Salary[264] = 185928
+nba_players_stats$Salary[265] = 3281400
+nba_players_stats$Salary[266] = 2230782
+nba_players_stats$Salary[267] = 3709999
+nba_players_stats$Salary[268] = 983595
+nba_players_stats$Salary[269] = 10305008
+nba_players_stats$Salary[270] = 2550798
+nba_players_stats$Salary[271] = 2149364
+nba_players_stats$Salary[272] = 2979535
+nba_players_stats$Salary[273] = 879142
+nba_players_stats$Salary[274] = 21490972
+nba_players_stats$Salary[275] = 12896187
+nba_players_stats$Salary[276] = 16892998
+nba_players_stats$Salary[277] = 7299779
+nba_players_stats$Salary[278] = 4189854
+nba_players_stats$Salary[279] = 983595
+nba_players_stats$Salary[280] = 2933882
+nba_players_stats$Salary[281] = 545225
+nba_players_stats$Salary[282] = 3305593
+nba_players_stats$Salary[283] = 25255033
+nba_players_stats$Salary[284] = 3224046
+nba_players_stats$Salary[285] = 5155964
+nba_players_stats$Salary[286] = 4567399
+nba_players_stats$Salary[287] = 1175358
+nba_players_stats$Salary[288] = 6720548
+nba_players_stats$Salary[289] = 12896187
+nba_players_stats$Salary[290] = 983595
+nba_players_stats$Salary[291] = 1171403
+nba_players_stats$Salary[292] = 8017048
+nba_players_stats$Salary[293] = 16335170
+nba_players_stats$Salary[294] = 9672140
+nba_players_stats$Salary[295] = 1006981
+nba_players_stats$Salary[296] = 9134799
+nba_players_stats$Salary[297] = 317520
+nba_players_stats$Salary[298] = 57727
+nba_players_stats$Salary[299] = 11821505
+nba_players_stats$Salary[300] = 1018973
+nba_players_stats$Salary[301] = 1556666
+nba_players_stats$Salary[302] = 22186170
+nba_players_stats$Salary[303] = 119878
+nba_players_stats$Salary[304] = 419214
+nba_players_stats$Salary[305] = 1391571
+nba_players_stats$Salary[306] = 5857018
+nba_players_stats$Salary[307] = 4709876
+nba_players_stats$Salary[308] = 1894320
+nba_players_stats$Salary[309] = 4836070
+nba_players_stats$Salary[310] = 1054353
+nba_players_stats$Salary[311] = 2955376
+nba_players_stats$Salary[312] = 10439959
+nba_players_stats$Salary[313] = 767226
+nba_players_stats$Salary[314] = 7522775
+nba_players_stats$Salary[315] = 17011885
+nba_players_stats$Salary[316] = 11214075
+nba_players_stats$Salary[317] = 3088368
+nba_players_stats$Salary[318] = 3337211
+nba_players_stats$Salary[319] = 3528525
+nba_players_stats$Salary[320] = 9347049
+nba_players_stats$Salary[321] = 4298729
+nba_players_stats$Salary[322] = 545225
+nba_players_stats$Salary[323] = 3389397
+nba_players_stats$Salary[324] = 3930650
+nba_players_stats$Salary[325] = 5783671
+nba_players_stats$Salary[326] = 7522775
+nba_players_stats$Salary[327] = 1458429
+nba_players_stats$Salary[328] = 3649889
+nba_players_stats$Salary[329] = 1556666
+nba_players_stats$Salary[330] = 877458
+nba_players_stats$Salary[331] = 2028828
+nba_players_stats$Salary[332] = 2491027
+nba_players_stats$Salary[333] = 354886
+nba_players_stats$Salary[334] = 2471812
+nba_players_stats$Salary[335] = 5391638
+nba_players_stats$Salary[336] = 9414216
+nba_players_stats$Salary[337] = 3224046
+nba_players_stats$Salary[338] = 10028935
+nba_players_stats$Salary[339] = 877458
+nba_players_stats$Salary[340] = 3582273
+nba_players_stats$Salary[341] = 1257249
+nba_players_stats$Salary[342] = 1715252
+nba_players_stats$Salary[343] = 3619637
+nba_players_stats$Salary[344] = 1504598
+nba_players_stats$Salary[345] = 3965074
+nba_players_stats$Salary[346] = 9371229
+nba_players_stats$Salary[347] = 2264054
+nba_players_stats$Salary[348] = 972429
+nba_players_stats$Salary[349] = 1556666
+nba_players_stats$Salary[350] = 13970869
+nba_players_stats$Salary[351] = 3562700
+nba_players_stats$Salary[352] = 877458
+nba_players_stats$Salary[353] = 2409440
+nba_players_stats$Salary[354] = 545225
+nba_players_stats$Salary[355] = 5367414
+nba_players_stats$Salary[356] = 12241168
+nba_players_stats$Salary[357] = 2950905
+nba_players_stats$Salary[358] = 5701189
+nba_players_stats$Salary[359] = 13003655
+nba_players_stats$Salary[360] = 3119541
+nba_players_stats$Salary[361] = 2712713
+nba_players_stats$Salary[362] = 2310768
+nba_players_stats$Salary[363] = 8597458
+nba_players_stats$Salary[364] = 877458
+nba_players_stats$Salary[365] = 16011624
+nba_players_stats$Salary[366] = 1142799
+nba_players_stats$Salary[367] = 4804345
+nba_players_stats$Salary[368] = 1787154
+nba_players_stats$Salary[369] = 983595
+nba_players_stats$Salary[370] = 379010
+nba_players_stats$Salary[371] = 6266822
+nba_players_stats$Salary[372] = 3761387
+nba_players_stats$Salary[373] = 7660335
+nba_players_stats$Salary[374] = 16979980
+nba_players_stats$Salary[375] = 10209481
+nba_players_stats$Salary[376] = 5701189
+nba_players_stats$Salary[377] = 1343352
+nba_players_stats$Salary[378] = 1213531
+nba_players_stats$Salary[379] = 877458
+nba_players_stats$Salary[380] = 1235583
+nba_players_stats$Salary[381] = 6125689
+nba_players_stats$Salary[382] = 983595
+nba_players_stats$Salary[383] = 428145
+nba_players_stats$Salary[384] = 3381023
+nba_players_stats$Salary[385] = 13873170
+nba_players_stats$Salary[386] = 2232115
+nba_players_stats$Salary[387] = 3224046
+nba_players_stats$Salary[388] = 1556666
+nba_players_stats$Salary[389] = 877458
+nba_players_stats$Salary[390] = 4685614
+nba_players_stats$Salary[391] = 1290392
+nba_players_stats$Salary[392] = 1900741
+nba_players_stats$Salary[393] = 2499367
+nba_players_stats$Salary[394] = 524342
+nba_players_stats$Salary[395] = 1556666
+nba_players_stats$Salary[396] = 1032302
+nba_players_stats$Salary[397] = 5449376
+nba_players_stats$Salary[398] = 945720
+nba_players_stats$Salary[399] = 1074682
+nba_players_stats$Salary[400] = 983595
+nba_players_stats$Salary[401] = 5739049
+nba_players_stats$Salary[402] = 1386727
+nba_players_stats$Salary[403] = 1319693
+nba_players_stats$Salary[404] = 1415151
+nba_players_stats$Salary[405] = 1719491
+nba_players_stats$Salary[406] = 16011624
+nba_players_stats$Salary[407] = 20759988
+nba_players_stats$Salary[408] = 1211596
+nba_players_stats$Salary[409] = 545225
+nba_players_stats$Salary[410] = 16892997
+nba_players_stats$Salary[411] = 9125664
+nba_players_stats$Salary[412] = 1408141
+nba_players_stats$Salary[413] = 1773225
+nba_players_stats$Salary[414] = 2026587
+nba_players_stats$Salary[415] = 32071
+nba_players_stats$Salary[416] = 1415151
+nba_players_stats$Salary[417] = 13164857
+nba_players_stats$Salary[418] = 1648390
+nba_players_stats$Salary[419] = 51614
+nba_players_stats$Salary[420] = 2119230
+nba_players_stats$Salary[421] = 1331144
+nba_players_stats$Salary[422] = 1726025
+nba_players_stats$Salary[423] = 231928
+nba_players_stats$Salary[424] = 5701189
+nba_players_stats$Salary[425] = 1319693
+nba_players_stats$Salary[426] = 1556666
+nba_players_stats$Salary[427] = 1231246
+nba_players_stats$Salary[428] = 545225
+nba_players_stats$Salary[429] = 2615059
+nba_players_stats$Salary[430] = 37613
+nba_players_stats$Salary[431] = 1400139
+nba_players_stats$Salary[432] = 752277
+nba_players_stats$Salary[433] = 5701189
+nba_players_stats$Salary[434] = 11423026
+nba_players_stats$Salary[435] = 2256832
+nba_players_stats$Salary[436] = 3703298
+nba_players_stats$Salary[437] = 2348137
+nba_players_stats$Salary[438] = 8597458
+nba_players_stats$Salary[439] = 545225
+nba_players_stats$Salary[440] = 8283505
+nba_players_stats$Salary[441] = 1739566
+nba_players_stats$Salary[442] = 3002619
+nba_players_stats$Salary[443] = 4298729
+nba_players_stats$Salary[444] = 9845024
+nba_players_stats$Salary[445] = 3953067
+nba_players_stats$Salary[446] = 9940811
+nba_players_stats$Salary[447] = 11135262
+nba_players_stats$Salary[448] = 115458
+nba_players_stats$Salary[449] = 1344040
+nba_players_stats$Salary[450] = 4997272
+nba_players_stats$Salary[451] = 2098983
+nba_players_stats$Salary[452] = 2698991
+nba_players_stats$Salary[453] = 289060
+nba_players_stats$Salary[454] = 5373411
+nba_players_stats$Salary[455] = 13433528
+nba_players_stats$Salary[456] = 1582362
+nba_players_stats$Salary[457] = 1300451
+nba_players_stats$Salary[458] = 1074682
+nba_players_stats$Salary[459] = 545225
+nba_players_stats$Salary[460] = 9242267
+nba_players_stats$Salary[461] = 5373411
+nba_players_stats$Salary[462] = 2738892
+nba_players_stats$Salary[463] = 5826103
+nba_players_stats$Salary[464] = 877458
+nba_players_stats$Salary[465] = 12461484
+nba_players_stats$Salary[466] = 1709518
+nba_players_stats$Salary[467] = 3574645
+nba_players_stats$Salary[468] = 301476
+nba_players_stats$Salary[469] = 1831000
+nba_players_stats$Salary[470] = 12106743
+nba_players_stats$Salary[471] = 10167207
+nba_players_stats$Salary[472] = 15687016
+nba_players_stats$Salary[473] = 2936032
+nba_players_stats$Salary[474] = 51614
+nba_players_stats$Salary[475] = 1472314
+nba_players_stats$Salary[476] = 5349983
+nba_players_stats$Salary[477] = 4204136
+nba_players_stats$Salary[478] = 1142799
+nba_players_stats$Salary[479] = 1054353
+nba_players_stats$Salary[480] = 7786760
+nba_players_stats$Salary[481] = 983595
+nba_players_stats$Salary[482] = 3133674
+nba_players_stats$Salary[483] = 114525
+nba_players_stats$Salary[484] = 1556666
+nba_players_stats$Salary[485] = 7259385
+nba_players_stats$Salary[486] = 1162806
+nba_players_stats$Salary[487] = 2209374
+nba_players_stats$Salary[488] = 17732257
+nba_players_stats$Salary[489] = 5588347
+nba_players_stats$Salary[490] = 1887679
+```
+```{r Adding missing data to experience column,echo=FALSE}
+levels(nba_players_stats$Experience) <- c(levels(nba_players_stats$Experience), 0)
+nba_players_stats$Experience[nba_players_stats$Experience == "R"] = "0"
+nba_players_stats$Experience[16] = 11
+nba_players_stats$Experience[18] = 10
+nba_players_stats$Experience[28] = 0
+nba_players_stats$Experience[32] = 6
+nba_players_stats$Experience[42] = 10
+nba_players_stats$Experience[49] = 7
+nba_players_stats$Experience[69] = 9
+nba_players_stats$Experience[81] = 0
+nba_players_stats$Experience[84] = 1
+nba_players_stats$Experience[105] = 0
+nba_players_stats$Experience[113] = 9
+nba_players_stats$Experience[116] = 3
+nba_players_stats$Experience[120] = 2
+nba_players_stats$Experience[124] = 10
+nba_players_stats$Experience[132] = 12
+nba_players_stats$Experience[136] = 4
+nba_players_stats$Experience[138] = 0
+nba_players_stats$Experience[139] = 2 
+nba_players_stats$Experience[149] = 1
+nba_players_stats$Experience[159] = 15
+nba_players_stats$Experience[161] = 1
+nba_players_stats$Experience[164] = 0
+nba_players_stats$Experience[174] = 2
+nba_players_stats$Experience[175] = 15
+nba_players_stats$Experience[176] = 2
+nba_players_stats$Experience[177] = 5
+nba_players_stats$Experience[178] = 1
+nba_players_stats$Experience[184] = 4
+nba_players_stats$Experience[187] = 0
+nba_players_stats$Experience[190] = 0
+nba_players_stats$Experience[199] = 0
+nba_players_stats$Experience[205] = 0
+nba_players_stats$Experience[209] = 6
+nba_players_stats$Experience[210] = 15
+nba_players_stats$Experience[211] = 6
+nba_players_stats$Experience[217] = 1
+nba_players_stats$Experience[243] = 12
+nba_players_stats$Experience[244] = 4
+nba_players_stats$Experience[257] = 10
+nba_players_stats$Experience[263] = 0
+nba_players_stats$Experience[295] = 3
+nba_players_stats$Experience[299] = 4
+nba_players_stats$Experience[320] = 5
+nba_players_stats$Experience[325] = 9
+nba_players_stats$Experience[342] = 1
+nba_players_stats$Experience[343] = 2
+nba_players_stats$Experience[347] = 9
+nba_players_stats$Experience[348] = 1
+nba_players_stats$Experience[355] = 7
+nba_players_stats$Experience[359] = 4
+nba_players_stats$Experience[371] = 4
+nba_players_stats$Experience[381] = 3
+nba_players_stats$Experience[394] = 5
+nba_players_stats$Experience[396] = 1
+nba_players_stats$Experience[400] = 2
+nba_players_stats$Experience[405] = 9
+nba_players_stats$Experience[410] = 6
+nba_players_stats$Experience[416] = 9 
+nba_players_stats$Experience[421] = 0
+nba_players_stats$Experience[428] = 0
+nba_players_stats$Experience[444] = 7
+nba_players_stats$Experience[445] = 2
+nba_players_stats$Experience[451] = 0
+nba_players_stats$Experience[457] = 2
+nba_players_stats$Experience[459] = 0
+nba_players_stats$Experience[463] = 3
+nba_players_stats$Experience[469] = 2
+nba_players_stats$Experience[471] = 7
+nba_players_stats$Experience <- as.numeric(as.character(nba_players_stats$Experience))
+```
+```{r Adding Team Name,echo=FALSE}
+nba_players_stats$Team[7] = "BKN"
+nba_players_stats$Team[46] = "BKN"
+nba_players_stats$Team[25] = "BKN"
+nba_players_stats$Team[57] = "BKN"
+nba_players_stats$Team[87] = "BKN"
+nba_players_stats$Team[100] = "BKN"
+nba_players_stats$Team[134] = "BKN"
+nba_players_stats$Team[206] = "BKN"
+nba_players_stats$Team[224] = "BKN"
+nba_players_stats$Team[235] = "BKN"
+nba_players_stats$Team[322] = "BKN"
+nba_players_stats$Team[327] = "BKN"
+nba_players_stats$Team[418] = "BKN"
+nba_players_stats$Team[1] = "PHX"
+nba_players_stats$Team[10] = "PHX"
+nba_players_stats$Team[33] = "PHX"
+nba_players_stats$Team[53] = "PHX"
+nba_players_stats$Team[133] = "PHX"
+nba_players_stats$Team[142] = "PHX"
+nba_players_stats$Team[157] = "PHX"
+nba_players_stats$Team[165] = "PHX"
+nba_players_stats$Team[220] = "PHX"
+nba_players_stats$Team[318] = "PHX"
+nba_players_stats$Team[323] = "PHX"
+nba_players_stats$Team[341] = "PHX"
+nba_players_stats$Team[391] = "PHX"
+nba_players_stats$Team[419] = "PHX"
+nba_players_stats$Team[466] = "PHX"
+nba_players_stats$Team[490] = "PHX"
+nba_players_stats$Team[12] = "NOP"
+nba_players_stats$Team[30] = "NOP"
+nba_players_stats$Team[38] = "NOP"
+nba_players_stats$Team[97] = "NOP"
+nba_players_stats$Team[99] = "NOP"
+nba_players_stats$Team[143] = "NOP"
+nba_players_stats$Team[152] = "NOP"
+nba_players_stats$Team[227] = "NOP"
+nba_players_stats$Team[259] = "NOP"
+nba_players_stats$Team[310] = "NOP"
+nba_players_stats$Team[362] = "NOP"
+nba_players_stats$Team[365] = "NOP"
+nba_players_stats$Team[384] = "NOP"
+nba_players_stats$Team[411] = "NOP"
+nba_players_stats$Team[453] = "NOP"
+nba_players_stats$Team[470] = "NOP"
+
+```
+```{r Adding column which indicates if team made the Playoffs,echo=FALSE}
+nba_players_stats$Playoffs.made = NA
+nba_players_stats$Playoffs.made <- ifelse(nba_players_stats$Team == "GSW" | nba_players_stats$Team == "ATL" | nba_players_stats$Team == "BKN" | nba_players_stats$Team == "CLE" | nba_players_stats$Team == "BOS" | nba_players_stats$Team == "LAC" | nba_players_stats$Team == "MIL" | nba_players_stats$Team == "TOR", 'Yes', 'No')
+```
+
+$$\textbf{\underline{Analyzing the Data:}}$$
+After cleaning the dataset and making sure that there were no NA's, I decided to explore the dataset. Instead of using the traditional graphs in the Base R package, I decided to use Tidyverse and incorporate ggplot2 to create more aesthetically pleasing graphs.
+```{r Loading libraries tidyverse and GGplot,echo = T,echo=FALSE,include=FALSE}
+library(tidyverse)
+library(ggplot2)
+```
+```{r Plot 1,out.width="50%",fig.align="center",echo=FALSE,fig.cap="Plot 1"}
+nba_players_stats %>%
+  ggplot()+
+  geom_boxplot(aes(Pos,PTS,fill = Playoffs.made))+
+  ggtitle("Position in the NBA compared to points made")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  labs(x = "Position in the NBA",y = "Points made overall",caption = "Data Source: 2014-2015 NBA Players",fill = "Player made Playoffs:")
+```
+Based on this box-and-whisker plot, this shows that a majority of the players that made the most points overall in the 2014-2015 season were Point Guards regardless if they made the playoffs or not. This makes sense because a Point Guards role in the offense is to run the offense by controlling the ball and is also considered the leader of the team. Thus, it makes sense that the Point Guard on average would shoot more often and thus make more shots on average compared to other positions in the NBA.
+```{r finding max BMI,echo=FALSE,echo=FALSE}
+x = max(nba_players_stats$BMI)
+```
+A full season in the NBA is 82 games. Noticeably in plot 2, it shows that the majority of the players that played in the 2014-2015 season that played a majority of the games, there BMI, was respectively in between 24-28 which indicates a healthy relation in weight and height. The outlier however, the player with the BMI of \textcolor{red}{`r round(x,2)`} upon looking at the plot, only seemed to play around 10 games. Using tidyverse, I found that it was Simon Bhullar, who only played 3 games and had a relatively poor performance, and has averaged only 3 minutes and made only 2 points. There could be a possibility that he didn't end up playing after because of an injury or maybe he simply wasn't good enough. Upon searching up his name on the internet, I found an article saying that he had been released by his team, the Sacramento Kings,that year with only a short stint with the team because he just was not up to par in the NBA. I also noticed that they could have signed him as a marketing technique concluding that he was the first of an Indian descent to play in the NBA. It also turns out that he had weight problems and was just seen as too big and not fit for the NBA \textcolor{blue}{\cite{bhullar}}.It seems like the NBA does care about weight and other aspects as well because after that no team in the NBA took him despite only playing 3 games and not yet proving himself. Despite his young age,no team was willing to take a chance on him, which shows to think that teams in the NBA do care about the weight and try to calculate how much the impact can have on the court. I than wanted to see how many people were motivated by the money and thus let their body gain in weight and thus raise their BMI. I put a salary greater than 5 million in the NBA because I personally believe anything greater than 5 million in the NBA is a lot. I also filtered through their BMI saying that if their BMI is greater than 25, they will be shown in the chart because according to BMI, anything greater than 25 is considered  “overweight”.
+```{r Plot 2, echo=FALSE, fig.align="center", fig.cap="Plot 2", warning=FALSE, out.width="50%"}
+nba_players_stats %>%
+  ggplot()+
+  geom_point(aes(Games.Played,BMI,color = Pos)) +
+  geom_smooth(aes(Games.Played,BMI),color = "red",method = "loess")+
+  ggtitle("Games Played in relation to the Players' BMI")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  labs(x = "Number of Games Played",caption = "Data Source: 2014-2015 NBA Players",color = "Position:")
+```
+
+```{r Finding who the highest BMI dude in NBA,include=FALSE}
+nba_players_stats %>%
+  filter(BMI > 32) %>%
+  select(Name,Age,MIN,PTS,Weight,Height,BMI)
+```
+
+\begin{figure}[ht]
+  \centering\includegraphics[angle = 0,scale = .5]{bhullarr}
+  \caption{Simon Bhullar pictured above}
+\end{figure}
+
+
+```{r finding specialized filters,include=FALSE}
+nba_players_stats %>%
+  filter(BMI > 25 & Salary > 5000000) %>%
+  select(Name,Salary) %>%
+  n_distinct()
+
+nba_players_stats %>%
+  filter(Salary > 5000000) %>%
+  select(Name,Salary) %>%
+  n_distinct()
+```
+Surprisingly, it was 103/157 people whose BMI was greater than 25 and salary greater than 5,000,000 compared to the salary greater than 5,000,000 thus meaning that \textcolor{red}{65.6\%} of NBA players in this range have a BMI that is considered "overweight". I then checked their performance on the court to see if money maybe had a factor along with BMI.
+```{r finding specialized filters again,include=FALSE}
+nba_players_stats %>%
+  filter(BMI > 25 & Salary > 5000000 & PTS <  1000 & Games.Played < 60) %>%
+  select(Name,Games.Played,PTS) %>%
+  n_distinct()
+```
+```{r finding average points,include=FALSE}
+mean_points = nba_players_stats %>%
+  filter(BMI > 25 & Salary > 5000000 & PTS <  1000 & Games.Played < 60) %>%
+  summarise(mean_points = mean(PTS)/82,mean_salary = mean(Salary))
+```
+It seems like \textcolor{red}{15.9\%} (25/157) NBA players' commanded huge salaries and yet only scored less than a 1000 points overall in the season thus averaging approximately only \textcolor{red}{`r round(mean_points[1],2)`} points per game. I also calculated the average salary per nba player in this filter, and it thus shows that the average salary for NBA players in this case is \textcolor{red}{`r mean_points[2]`} per player. That is extremely high and shows that either a majority of these players are injured, or are commanding a huge salary and are not trying as hard to earn that salary because they are averaging very few points per game with their BMI being considered in the "overweight" & "obese" category. Although it seems like approximately \textcolor{red}{16\%} of NBA players are not trying hard enough it begs to differ that maybe if they tried harder in expectations of what the team had when they offered that salary, they quite possibly have led their team to the playoffs.
+```{r finding players who made the playoffs with high BMi and high pay,include=FALSE}
+nba_players_stats %>%
+  filter(BMI > 25 & Salary > 5000000 & PTS <  1000 & Games.Played < 60 & Playoffs.made == "Yes") %>%
+  select(Name) %>%
+  n_distinct()
+```
+Upon analyzing the playoffs column, I realized that out of the players that commanded huge salaries and had a BMI over the "fit" category, noticeably only \textcolor{red}{24\%} (6/25) players made it to the playoffs. However, despite the fact that I did notice that BMI does have an effect, I noticed that out of all the teams that made it to the playoffs, the Cleveland Cavaliers who had the heaviest team in terms of BMI in the playoffs made it to the Finals. I than realize that just analyzing the data is not enough because it can be misleading and will thus turn to machine learning techniques to figure out if there are factors that affect a performance of an NBA player.
+```{r Plot 3,out.width="50%",fig.align="center",echo=FALSE,fig.cap="Plot 3"}
+nba_players_stats %>%
+  filter(Playoffs.made == "Yes") %>%
+  group_by(Team) %>%
+  summarise(Average.BMI = mean(BMI)) %>%
+  ggplot() +
+  geom_point(aes(Team,Average.BMI),color = "magenta")+
+  ggtitle("Playoff Teams in relation to average BMI") +
+  theme(plot.title = element_text(hjust = 0.5))+
+  labs(caption = "Data Source: 2014-2015 NBA Players",y = "Average BMI")
+```
+
+$$\textbf{\underline{Machine Learning Analysis:}}$$
+I will start by doing an Cross Validation Lasso to see what variables would be nice with the regressor being BMI. We will do this by estimating the vector of parameters $\beta$ from the Lasso model:
+$$\hat{\beta} = argmin\sum_{i=1}^n(yi-x^\prime)^2+\lambda\sum_{j=1}^p|\beta_j|$$
+I am using Cross-Validation Lasso to pick the true $\lambda$ that can lead to the true prediction error and also picks the best model by penalizing more complicated models. I am also using Cross-Validation Lasso over other best model fits solely because it is one of the best ways to minimize the OOS errors.  
+```{r,include=FALSE}
+library(gamlr)
+model = glm(BMI~.+PTS*MIN+Age*EFF+PF*TOV+BLK*STL,data = nba_players_stats)
+x = model.matrix(model)[,-34]
+y = nba_players_stats$BMI
+fit = cv.gamlr(x,y)
+```
+```{r,echo=FALSE,fig.align="center", fig.cap="Plot 4", warning=FALSE, out.width="50%"}
+plot(fit)
+```
+```{r,echo=FALSE,fig.align="center", fig.cap="Plot 5", warning=FALSE, out.width="50%"}
+spender = gamlr(x,y)
+plot(spender)
+```
+
+This graph shows that there is not that much variability in terms of BMI and thus there is not much we can do to predict it. This graph is basically I suspect that the best models to predict BMI are the complex ones.
+
+```{r,echo=FALSE,include=FALSE}
+lol = predict(fit,newdata = x)
+gay = lol[1,]
+duh = nba_players_stats$BMI[1]
+```
+I then predicted the in sample deviance and found that for the person I predicted it on was pretty accurate, with it being pretty close with the real BMI. The real BMI of AJ Price was \textcolor{red}{`r duh`} and the predicted BMI was \textcolor{red}{`r gay`}, which is fairly accurate. I will also be doing now a Nonparametric Bootstrap to essentially see a fairly accurate standard error for the BMI column of my dataset. 
+```{r,echo=FALSE,include=FALSE}
+B = 100
+N = nrow(nba_players_stats)
+p_hat =rep(NaN,B)
+for(b in 1:B) {
+  bssample =sample.int(N, replace=TRUE)
+  bsX = x[bssample,]
+  bsy = nba_players_stats$BMI[bssample]
+  bsmodel =cv.gamlr(bsX, bsy, family = "gaussian")
+  bspredict =predict(bsmodel, newdata = x, type = "response")
+  p_hat[b] = bspredict
+}
+```
+```{r,echo=FALSE,fig.align="center", fig.cap="Plot 6", warning=FALSE, out.width="50%"}
+hist(p_hat)
+```
+```{r,echo=FALSE}
+hehe = (mean(nba_players_stats$BMI)+c(-1,1)*1.96*sd(p_hat,na.rm = TRUE))
+```
+Based off the bootstrap and thus after making an confidence interval, I found that a majority of the players BMI would be between the confidence interval of `r hehe`.
+Based off of this histogram, I see that there is a lot of variability and that it is skewed to the left. This has come to my conclusion that we can predict BMI based off on a multitude of factors. However, I have yet to try an out-of sample prediction for BMI. My next step in this project would be to than try to estimate an out-of sample prediction for BMI based off of a lot of variables. I do believe that it is possible to calculate in sample prediction for BMI based of on the performances of an NBA player on the field including his salary as well.However, to answer my questions about whether performance in the NBA is related to more than the physical attributes of an athlete I believe there is more to it because my predictions, while accurate are still off and thus I do believe that there are more factors that we need to even more accurately predict BMI of an NBA player. 
+
+
+\begin{thebibliography}{9}
+\bibitem{baseball} History Staff: Who Invented Baseball?,\\\texttt{https://www.history.com/news/who-invented-baseball}
+\bibitem{viewership} Richard,\\\texttt{https://www.si.com/media/2016/06/20/nba-finals-game-7-tv-ratings-viewers-cavaliers-warriors}
+\bibitem{cpi} Inflation Calculator,\\\texttt{https://www.davemanuel.com/inflation-calculator.php}
+\bibitem{lebron} LeBron James NBA Salary,\\\texttt{https://hoopshype.com/player/lebron-james/salary/}
+\bibitem{mikan} George Mikan Stats,\\\texttt{https://www.basketball-reference.com/players/m/mikange01.html}
+\bibitem{lebronppg} Lebron James Stats,\\\texttt{https://www.basketball-reference.com/players/j/jamesle01.html}
+\bibitem{shotclock} Keely Flanagan: Basketball's Shot Clock: A Brief History,\\\texttt{https://www.wbur.org/onlyagame/2015/04/22/nba-shot-clock-history-basketball}
+\bibitem{dataset} Omri Goldstein: NBA Players Stats - 2014-2015,\\\texttt{https://www.kaggle.com/drgilermo/nba-players-stats-20142015}
+\bibitem{Shaq} Associated Press: Athlete Study Exposes Flaw of BMI Obesity Measure,\\\texttt{https://www.foxnews.com/story/athlete-study-exposes-flaw-of-bmi-obesity-measure}
+\bibitem{money} Brian Hutchinson: NBA Players Don't Play to Win, They Play for the Money,\\\texttt{https://bleacherreport.com/articles/82851-nba-players-dont-play-to-win-they-play-for-the-money}
+\bibitem{fillna} Basketball Stats and History Statistics, scores, and history for the NBA,\\\texttt{https://www.basketball-reference.com}
+\bibitem{nba_salary} NBA Players Salaries during the 2014-2015 season,\\\texttt{https://hoopshype.com/salaries/2014-2015/}
+\bibitem{bhullar} Ailene Voisin: Opinion: With weight down, Sim Bhullar’s game is on the rise,\\\texttt{https://www.sacbee.com/sports/spt-columns-blogs/ailene-voisin/article16700834.html}
+\end{thebibliography}
+
